@@ -1,7 +1,7 @@
 <template>
 <div class="container">
   <div class="top">
-    <yd-navbar title="积分兑换" bgcolor="#d94927" color="#fff">
+    <yd-navbar title="分销商产品订单" bgcolor="#d94927" color="#fff">
       <section slot="left" @click="handleBack">
         <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
       </section>
@@ -91,11 +91,14 @@
         </div>
       </yd-tab-panel> -->
 
-      <yd-tab-panel label="已处理" tabkey="2">
+      <yd-tab-panel label="待签收" tabkey="2">
         <div class="list">
           <div class="list-item" v-for="item,key in data2" :key="key">
             <div class="list-tit">
               订单号:{{item.orderNo}} <span>{{item.createTime.substr(0,10)}}</span>
+            </div>
+            <div class="list-tit">
+              物流单号:{{item.orderNum}}
             </div>
             <div class="list-item-body" v-for="sub,key in item.goodslist" :key="key">
               <router-link :to="{ name: 'mdetail', params: {goodsId : sub.goodsId} }">
@@ -119,8 +122,8 @@
 
             <div class="list-item-bot">
               总计：<i>{{item.totalMoney}} 两</i>
-              <!-- <span @click="gotGoods" :id="item.orderId">确认收货</span> -->
-              <!-- <span class="yellow">查看物流</span> -->
+              <span v-if="item.orderStatus!=4" @click="gotGoods" :id="item.orderId">确认收货</span>
+              <span class="yellow" @click="showWuLiu" :id="key">查看物流</span>
             </div>
 
           </div>
@@ -217,6 +220,14 @@ export default {
       this.$router.go(-1);
       // console.log(this.$router);
     },
+    //查看物流
+    showWuLiu(e) {
+      console.log(this.data2);
+      let index = e.target.id;
+      console.log(index);
+      let url = `https://www.kuaidi100.com/chaxun?com=${this.data2[index].deliverType}&nu=${this.data2[index].orderNum}`;
+      window.location.href = url;
+    },
     //确认收货
     gotGoods(e) {
       // console.log(e.target.id);
@@ -241,7 +252,7 @@ export default {
     loadingNow(label, tabkey) {
       console.log(tabkey);
       // console.log(label, tabkey);
-      if (tabkey == 2) {
+      if (tabkey == 1) {
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryConvertDeliveryByPage2&userId=${userId}`;
         this.$http.get(url).then((res) => {
           console.log(res.body);

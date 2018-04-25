@@ -6,6 +6,7 @@
   <swiper :options="swiperOption" class="slist-box">
     <swiper-slide class="list-item" v-for="(item,index) of specialData.goodsChilds" :key="index">
       <router-link :to="{name:'detail',params:{goodsId: item.goodsId}}">
+        <img v-if="item.isDistribut == 1" src="../assets/xiao.png" class="test-xiao"></img>
         <div class="goods-img autoimg" :style="{ backgroundImage : 'url(' + item.goodsImg + ')' }">
           <!-- 商品小图 -->
         </div>
@@ -57,6 +58,12 @@ export default {
 }
 </script>
 <style scoped>
+.test-xiao {
+  position: absolute;
+  left: 0;
+  top:0;
+  width:32px;
+}
 .scroll-list {
   width: 100%;
   height: 8.2rem;

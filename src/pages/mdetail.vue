@@ -37,7 +37,7 @@
             <!-- 这里面放详情 -->
           </div>
         </yd-tab-panel>
-        <yd-tab-panel :label="'评论('+data.couponsCount+')'" tabkey="2">
+        <!--<yd-tab-panel :label="'评论('+data.couponsCount+')'" tabkey="2">
           <div class="comment">
             <p v-if="!data.goods_appraises">暂无评论</p>
             <div class="comment-item" v-for="item,key in data.goods_appraises" :key="key">
@@ -47,7 +47,7 @@
             </div>
 
           </div>
-        </yd-tab-panel>
+        </yd-tab-panel> -->
       </yd-tab>
     </div>
 
@@ -65,7 +65,7 @@
     <yd-popup v-model="show" position="bottom" height="60%">
       <div class="choose-top" slot="top">
         <p class="choose-tit">{{data.goodsName}}</p>
-        <p class="choosed">已选：“<span>{{totalAttr}} ， {{spinner}}{{data.goodsUnit}} ， <i>{{totalPrice}} 两</i></span>”</p>
+        <p class="choosed">已选：“<span>{{totalAttr}} ， {{spinner}} ， <i>{{totalPrice}} 两</i></span>”</p>
       </div>
       <div class="choose-cen">
         <div class="choose-type">
@@ -76,8 +76,8 @@
         </div>
         <div class="choose-num">
           <p class="choose-type-tit">选择数量：</p>
-          <yd-spinner v-model="spinner" :max="attrStock"></yd-spinner>
-          <span>库存：{{attrStock}}</span>
+          <yd-spinner v-model="spinner"></yd-spinner>
+          <!-- <span>库存：{{attrStock}}</span> -->
         </div>
 
 
@@ -86,7 +86,7 @@
         <yd-flexbox>
           <yd-flexbox-item>
             <div class="buy" @click.native="show = true">
-              <yd-button bgcolor="#e8380d" color="#FFF" @click.native="buyNow">立即兑换</yd-button>
+              <yd-button bgcolor="#e8380d" color="#FFF" @click.native="buyNow">立即购买</yd-button>
             </div>
           </yd-flexbox-item>
         </yd-flexbox>
@@ -99,7 +99,7 @@
     <yd-flexbox>
       <yd-flexbox-item>
         <div class="buy" @click.native="show = true">
-          <yd-button bgcolor="#e8380d" color="#FFF" @click.native="show = true">立即兑换</yd-button>
+          <yd-button bgcolor="#e8380d" color="#FFF" @click.native="show = true">立即购买</yd-button>
         </div>
 
       </yd-flexbox-item>
@@ -186,10 +186,10 @@ export default {
       this.totalAttrPrice = this.data.goodsAttrs[now].attrPrice;
       this.totalPrice = parseFloat(this.data.goodsAttrs[now].attrPrice) * this.spinner;
       this.totalPrice = this.totalPrice.toFixed(2);
-      // console.log(now);
     },
     spinner: function(now) {
-      this.spinner = now.replace(/^[0-9]/g,'');
+      console.log(now);
+      // this.spinner = now.replace(/^[0-9]/g,'');
       if(now>this.attrStock*1) this.spinner = this.attrStock;
       if(now <= 0) this.spinner = 1;
       this.totalPrice = parseFloat(this.data.goodsAttrs[this.radio].attrPrice) * now;

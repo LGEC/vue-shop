@@ -24,6 +24,7 @@ import msgInfo from '@/pages/msgInfo'
 import mySub from '@/pages/mySub'
 import myInfo from '@/pages/myInfo'
 import myLeader from '@/pages/myLeader'
+import historyCommission from '@/pages/historyCommission'
 import address from '@/pages/address'
 import addAddress from '@/pages/addAddress'
 import contact from '@/pages/contact'
@@ -127,6 +128,11 @@ export default new Router({
       path: '/myLeader',
       name: 'myLeader',
       component: myLeader,
+    },
+    {
+      path: '/historyCommission',
+      name: 'historyCommission',
+      component: historyCommission,
     },
     {
       path: '/address',

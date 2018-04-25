@@ -52,8 +52,8 @@ export default {
   },
   beforeCreate() {
     this.$http.get(`${config.host}index.php?m=Mobile&c=Users&a=getUserId`).then(res => {
-      window.localStorage.setItem('userId', res.body);
-      // window.localStorage.setItem('userId', 136);
+      // window.localStorage.setItem('userId', res.body);
+      window.localStorage.setItem('userId', 136);
       this.userId = window.localStorage.getItem('userId');
     });
   },
@@ -62,7 +62,7 @@ export default {
     let specialUrl = `${config.host}index.php?m=Mobile&c=Index&a=Ads&rows=20`;
 
 
-    //
+    //"files.autoSave":"onFocusChange"
     // this.$http.get('http://00.37518.com/index.php?m=Mobile&c=Users&a=login').then(res => {
     //   console.log('-------------------');
     //   console.log(res);

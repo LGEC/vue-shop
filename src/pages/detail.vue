@@ -23,11 +23,12 @@
 
     </div>
     <div class="goodsinfo">
-      <div class="goods-tit"> {{data.goodsName}}
+      <div class="goods-tit">{{data.goodsName}}
       </div>
       <div class="goods-desc"> {{data.goodsSpec}}
       </div>
-      <div class="goods-price">{{data.shopPrice}} 两<span class="goods-sales">评分: {{data.goodsScore}} &nbsp; 已售: {{data.saleCount}}</span> <span class="postage">快递：{{data.deliveryMoney}} 两</span>
+      <div class="goods-price">会员价：{{data.marketPrice}}两</div>
+      <div class="goods-price"> 零售价：{{data.shopPrice}} 两 <span class="goods-sales">评分: {{data.goodsScore}} &nbsp; 已售: {{data.saleCount}}</span> <span class="postage">快递：{{data.deliveryMoney}} 两</span>
       </div>
       <p class="add" v-if="data.FreeMoney">本商品满{{data.FreeMoney}}元即享包邮</p>
     </div>
@@ -72,7 +73,7 @@
         <div class="choose-type">
           <p class="choose-type-tit">选择规格：</p>
           <yd-radio-group v-model="radio" size="16" color="#e8380d">
-            <yd-radio v-for="item,key in data.goodsAttrs" :val="key">{{item.attrVal}}</yd-radio>
+            <yd-radio v-for="item,key in data.goodsAttrs" :val="key" :key="key">{{item.attrVal}}</yd-radio>
           </yd-radio-group>
         </div>
         <div class="choose-num">
@@ -199,7 +200,12 @@ export default {
       this.attrStock = this.data.goodsAttrs[now].attrStock;
       this.totalAttr = this.data.goodsAttrs[now].attrVal;
       this.totalAttrPrice = this.data.goodsAttrs[now].attrPrice;
-      this.totalPrice = parseFloat(this.data.goodsAttrs[now].attrPrice) * this.spinner;
+      if(this.data.userType == 2){
+        this.totalPrice = parseFloat(this.data.marketPrice) * this.spinner;
+      }else{
+        this.totalPrice = parseFloat(this.data.goodsAttrs[now].attrPrice) * this.spinner;
+      }
+
       this.totalPrice = this.totalPrice.toFixed(2);
       // console.log(now);
     },
@@ -208,7 +214,13 @@ export default {
       // this.data = now.replace(/[^/d]/g,'');
       // if(now>this.attrStock*1) this.spinner = this.attrStock;
       // if(now <= 0) this.spinner = 1;
-      this.totalPrice = parseFloat(this.data.goodsAttrs[this.radio].attrPrice) * now;
+      if(this.data.userType == 2){
+        this.totalPrice = parseFloat(this.data.marketPrice) * this.spinner;
+      }else{
+        // console.log(now+'-------------------'+this.data.goodsAttrs[now].attrPrice);
+        this.totalPrice = parseFloat(this.data.goodsAttrs[this.radio].attrPrice) * this.spinner;
+      }
+
       this.totalPrice = this.totalPrice.toFixed(2);
       // console.log(this.totalPrice);
     },
@@ -304,7 +316,7 @@ export default {
           cnt: goodsCnt, //数量
 
           goodsName: this.data.goodsName, //商品名字
-          goodsPrice: this.totalAttrPrice, //已选规格的单价
+          goodsPrice: this.data.userType == 2 ? this.data.marketPrice : this.data.shopPrice, //已选规格的单价
           goodsThums: config.host + this.data.goodsThums, //图片
           goodsAttr: this.totalAttr, //已选规格
           shopName: this.data.shopName //店铺名字
@@ -318,6 +330,7 @@ export default {
         }).then((res) => {
           // console.log(res);
           let data = res.body;
+          console.log(data);
 
           this.orderData.defaultAddress = data.defaultAddress; //默认地址
           this.orderData.addressId = data.defaultAddress ? data.defaultAddress.addressId : 0; //默认地址ID
@@ -325,6 +338,7 @@ export default {
           this.orderData.totalMoney = data.totalMoney; //商品价格
           this.orderData.deliverMoney = data.deliverMoney; //邮费
           this.orderData.realTotalMoney = data.realTotalMoney; //总价
+          this.orderData.userMoney = data.userMoney; //余额
 
           this.$dialog.loading.open('正在生成订单...');
           setTimeout(() => {

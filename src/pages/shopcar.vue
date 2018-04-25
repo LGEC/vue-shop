@@ -188,7 +188,6 @@ export default {
         }; //for 结束
 
         // console.log(this.orderData);
-
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=checkOrderInfo`;
         this.$http.post(url, this.orderData, {
           emulateJSON: true
@@ -201,6 +200,7 @@ export default {
           this.orderData.totalMoney = data.totalMoney; //商品价格
           this.orderData.deliverMoney = data.deliverMoney; //邮费
           this.orderData.realTotalMoney = data.realTotalMoney; //总价
+          this.orderData.userMoney = data.userMoney; //余额
 
           this.$dialog.loading.open('正在生成订单...');
           setTimeout(() => {

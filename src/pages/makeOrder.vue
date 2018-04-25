@@ -61,6 +61,9 @@
               </i>
             </yd-radio>
           </yd-radio-group>
+          <div class="addBtn" @click="handleAddAddress">
+            添加收货地址
+          </div>
         </div>
       </yd-popup>
     </div>
@@ -116,16 +119,20 @@
     </div>
   </div>
 
+  <div class="use-market" v-if="mjtype && orderData.userMoney*1 <= orderData.realTotalMoney && orderData.userMoney*1 > 0">
+    <yd-checkbox v-model="isUseMarket" shape="circle">当前剩余银两 {{orderData.userMoney}} 是否使用银子抵扣</yd-checkbox>
+  </div>
+
   <!-- 固定底部 -->
   <div class="fixed-bot">
     <yd-flexbox>
       <yd-flexbox-item>
-        <p class="bot-left">总计：<span>{{orderData.realTotalMoney}}   两</span></p>
+        <p class="bot-left">总计：<span>{{adTotalMoney}}   两</span></p>
       </yd-flexbox-item>
-      <div class="sure-btn" @click="confirmOrder1">
+      <div class="sure-btn" @click="confirmOrder1" v-if="mjtype">
         余额支付
       </div>
-      <div class="sure-btn" @click="confirmOrder" v-if="mjtype">
+      <div class="sure-btn" @click="confirmOrder">
         微信支付
       </div>
     </yd-flexbox>
@@ -139,6 +146,8 @@ let userId;
 export default {
   data() {
     return {
+      adTotalMoney: '',
+      isUseMarket: false, //是否使用银子折扣
       orderData: {}, //渲染到页面的数据（上一个页面传过来的）
       addressData: [], //地址数据
       orderRemarks: '', //文本域
@@ -151,12 +160,33 @@ export default {
   beforeCreate() {
     userId = window.localStorage.getItem('userId');
   },
+  watch: {
+    isUseMarket(now) {
+      if (now) {
+        this.adTotalMoney = this.orderData.realTotalMoney * 1 - this.orderData.userMoney * 1;
+      } else {
+        this.adTotalMoney = this.orderData.realTotalMoney;
+      }
+    }
+  },
   created() {
     console.log(this.$route.query.mjtype);
-    this.orderData = this.$route.query.data;
-    console.log(this.orderData);
-    this.mjtype = this.$route.query.mjtype == 2 ? true : false;
-    this.radio = this.orderData.addressId;
+    console.log('-------------------------------------');
+    console.log(window.mjOrderData);
+    console.log('-------------------------------------');
+    if (window.mjOrderData) {
+      this.orderData = window.mjOrderData;
+      this.adTotalMoney = this.orderData.realTotalMoney;
+      this.mjtype = window.mjType == 2 ? true : false;
+      this.radio = this.orderData.addressId;
+    } else {
+      this.orderData = this.$route.query.data;
+      this.adTotalMoney = this.orderData.realTotalMoney;
+      this.mjtype = this.$route.query.mjtype == 2 ? true : false;
+      this.radio = this.orderData.addressId;
+    }
+
+    console.log('addressid=' + this.orderData.addressId);
     // console.log(this.radio);
     // for (let i = 0; i < this.orderData.goodsData.length; i++) {
     //   this.orderData.goodsData[i].goodsThums = config.host + this.orderData.goodsData[i].goodsThums;
@@ -164,6 +194,14 @@ export default {
     // console.log(this.orderData);
   },
   methods: {
+    //跳转至添加地址页面
+    handleAddAddress(e) {
+      //跳转页面后返回本页面 数据丢失 为了解决本问题 将数据保存至window对象上(因为项目设计时未使用vuex)
+      window.mjOrderData = this.orderData;
+      window.mjType = this.mjType;
+      console.log('111');
+      this.$router.push('/addAddress');
+    },
     handleBack() {
       this.$router.go(-1);
       // console.log(this.$router);
@@ -171,11 +209,12 @@ export default {
     // 选择地址
     chooseAddress() {
       this.show = true;
-
+      this.$dialog.loading.open('数据加载中');
       let url = `${config.host}index.php?m=Mobile&c=UserAddress&a=getUserAddress&userId=${userId}`;
       this.$http.get(url).then((res) => {
         this.addressData = res.body;
-        console.log(res.body);
+        this.$dialog.loading.close();
+        console.log(res.body.length);
       })
     },
     // 更改地址
@@ -191,76 +230,132 @@ export default {
             // console.log(this.orderData.address);
             // console.log(this.orderData);
           };
+          console.log(this.orderData);
         }
+
       };
       this.show = false;
     },
     confirmOrder1() {
-      console.log(userId);
-      this.postData.addressId = this.orderData.addressId; //地址ID
-      this.postData.orderIds = this.orderData.orderIds; //订单ID
-      this.postData.orderRemarks = this.orderRemarks; //留言
-      // console.log(this.postData);
-      let url = `${config.host}index.php?m=Mobile&c=Orders&a=addOrders&userId=${userId}&orderId=${this.postData.orderIds}&consigneeId=${this.postData.addressId}&remarks=${this.postData.orderRemarks}&type=2&totalMoney=${this.orderData.realTotalMoney}`;
-      this.$http.post(url, this.postData, {
-        emulateJSON: true
-      }).then((res) => {
-        console.log(res);
-        if (res.data.status == 1) {
-          this.$dialog.toast({
-            icon: 'success',
-            mes: '下单成功!',
-            timeout: 1500,
-            callback: () => {
-              // window.location.href = 'http://00.37518.com/index.php?m=Mobile&c=Payments&a=toPay';
-              this.$router.go(-1);
+      window.mjOrderData = null;
+      window.mjType = null;
+      if (!this.orderData.defaultAddress) {
+        this.$dialog.confirm({
+          title: '温馨提示',
+          mes: '请选择收货地址！',
+          opts: [{
+              txt: '取消',
+              color: false
+            },
+            {
+              txt: '确定',
+              color: true,
+              callback: () => {
+                this.chooseAddress();
+              }
             }
-          });
-        }else if(res.data.status == -6){
-          this.$dialog.toast({
-            icon: 'error',
-            mes: '账户余额不足',
-            timeout: 1500
-          });
-        } else {
+          ]
+        });
+      } else {
+        console.log(this.orderData.addressId);
+        console.log(userId);
+        this.postData.addressId = this.orderData.addressId; //地址ID
+        this.postData.orderIds = this.orderData.orderIds; //订单ID
+        this.postData.orderRemarks = this.orderRemarks; //留言
+        // console.log(this.postData);
+        let url =
+          `${config.host}index.php?m=Mobile&c=Orders&a=addOrders&userId=${userId}&orderId=${this.postData.orderIds}&consigneeId=${this.postData.addressId}&remarks=${this.postData.orderRemarks}&type=2&totalMoney=${this.orderData.realTotalMoney}`;
+        this.$http.post(url, this.postData, {
+          emulateJSON: true
+        }).then((res) => {
+          console.log(res);
+          if (res.data.status == 1) {
+            this.$dialog.toast({
+              icon: 'success',
+              mes: '下单成功!',
+              timeout: 1500,
+              callback: () => {
+                // window.location.href = 'http://00.37518.com/index.php?m=Mobile&c=Payments&a=toPay';
+                this.$router.go(-1);
+              }
+            });
+          } else if (res.data.status == -6) {
+            this.$dialog.toast({
+              icon: 'error',
+              mes: '账户余额不足',
+              timeout: 1500
+            });
+          } else if (res.data.status == -5) {
+            this.$dialog.toast({
+              icon: 'error',
+              mes: '您还不是分销商，银子不足',
+              timeout: 1500
+            });
+          } else {
+            this.$dialog.toast({
+              icon: 'error',
+              mes: '网络异常，请重试!',
+              timeout: 1500
+            });
+          }
+        });
+      }
 
-          this.$dialog.toast({
-            icon: 'error',
-            mes: '网络异常，请重试!',
-            timeout: 1500
-          });
-        }
-      });
     },
     //提交订单
     confirmOrder() {
-      this.postData.addressId = this.orderData.addressId; //地址ID
-      this.postData.orderIds = this.orderData.orderIds; //订单ID
-      this.postData.orderRemarks = this.orderRemarks; //留言
-      // console.log(this.postData);
-      let url = `${config.host}index.php?m=Mobile&c=Orders&a=addOrders&userId=${userId}&orderId=${this.postData.orderIds}&consigneeId=${this.postData.addressId}&remarks=${this.postData.orderRemarks}&type=1&totalMoney=${this.orderData.realTotalMoney}`;
-      this.$http.post(url, this.postData, {
-        emulateJSON: true
-      }).then((res) => {
-        console.log(res);
-        if (res.data.status == 1) {
-          this.$dialog.toast({
-            icon: 'success',
-            mes: '正在生成订单~~~',
-            timeout: 1500,
-            callback: () => {
-              window.location.href = `${config.host}index.php?m=Mobile&c=Payments&a=toPay`;
-              // this.$router.go(-1);
+      window.mjOrderData = null;
+      window.mjType = null;
+      if (!this.orderData.defaultAddress) {
+        this.$dialog.confirm({
+          title: '温馨提示',
+          mes: '请选择收货地址！',
+          opts: [{
+              txt: '取消',
+              color: false
+            },
+            {
+              txt: '确定',
+              color: true,
+              callback: () => {
+                this.chooseAddress();
+              }
             }
-          });
-        } else {
-          this.$dialog.toast({
-            icon: 'error',
-            mes: '网络异常，请重试!',
-            timeout: 1500
-          });
-        }
-      });
+          ]
+        });
+      } else {
+        console.log(this.orderData.addressId);
+        this.postData.addressId = this.orderData.addressId; //地址ID
+        this.postData.orderIds = this.orderData.orderIds; //订单ID
+        this.postData.orderRemarks = this.orderRemarks; //留言
+        this.postData.useMarket = this.isUseMarket ? 1 : 0; //是否使用抵扣
+        // console.log(this.postData);
+        let url =
+          `${config.host}index.php?m=Mobile&c=Orders&a=addOrders&userId=${userId}&orderId=${this.postData.orderIds}&consigneeId=${this.postData.addressId}&remarks=${this.postData.orderRemarks}&type=1&totalMoney=${this.orderData.realTotalMoney}`;
+        this.$http.post(url, this.postData, {
+          emulateJSON: true
+        }).then((res) => {
+          console.log(res);
+          if (res.data.status == 1) {
+            this.$dialog.toast({
+              icon: 'success',
+              mes: '正在生成订单~~~',
+              timeout: 1500,
+              callback: () => {
+                window.location.href = `${config.host}index.php?m=Mobile&c=Payments&a=toPay`;
+                // this.$router.go(-1);
+              }
+            });
+          } else {
+            this.$dialog.toast({
+              icon: 'error',
+              mes: '网络异常，请重试!',
+              timeout: 1500
+            });
+          }
+        });
+      }
+
     }
   }
 }
@@ -268,6 +363,11 @@ export default {
 
 <style scoped>
 /* 默认地址 */
+
+.use-market {
+  padding: 10px;
+  background-color: #fff;
+}
 
 .address {
   width: 100%;
@@ -440,5 +540,17 @@ export default {
 
 .text {
   padding: 0 .3rem;
+}
+
+.addBtn {
+  width: 90%;
+  margin: 0 auto;
+  margin-top: .5rem;
+  line-height: .8rem;
+  border-radius: .4rem;
+  background-color: #E8380d;
+  color: #fff;
+  display: block;
+  text-align: center;
 }
 </style>

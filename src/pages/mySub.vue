@@ -49,7 +49,7 @@ export default {
   created () {
     let url = `${config.host}index.php?m=Mobile&c=Users&a=getSpreadUserList&userId=${userId}`;
         this.$http.get(url).then((res)=>{
-          // console.log(res.body);
+          console.log(res.body);
         this.data = res.body;
         })
   },

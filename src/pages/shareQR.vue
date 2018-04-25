@@ -71,10 +71,10 @@ export default {
   height: 70%;
 }
 .market-name{
-  padding-top: 25%;
+  padding-top: 15%;
 }
 .main-text{
-  padding-top: 15%;
+  padding-top: 5%;
   color: #333;
 }
 .main-text p:first-child{
@@ -84,7 +84,7 @@ export default {
 .code-box{
   width: 3rem;
   margin: 0 auto;
-  padding-top: 25%;
+  padding-top: 20%;
   overflow: hidden;
 }
 .main-top p{

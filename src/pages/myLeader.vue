@@ -2,14 +2,14 @@
 <div class="container">
 
   <div class="top">
-    <yd-navbar title="绑定邀请码" bgcolor="#d94927" color="#fff">
+    <yd-navbar :title="!loaded ? '' : showInput ? '绑定邀请码' : '我的推荐人'" bgcolor="#d94927" color="#fff">
       <section slot="left" @click="handleBack">
         <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
       </section>
     </yd-navbar>
   </div>
 
-  <div class="cen">
+  <div class="cen" v-if="showInput && loaded">
     <yd-cell-group>
 
       <yd-cell-item>
@@ -24,6 +24,12 @@
     </yd-button-group>
   </div>
 
+  <div class="cen my-leader" v-if="!showInput && loaded">
+    <!-- <h5>我的推荐人</h5> -->
+    <img :src="content.userPhoto" alt="">
+    <p>{{content.loginName}}</p>
+  </div>
+
 
 </div>
 </template>
@@ -35,10 +41,29 @@ export default {
   data() {
     return {
       input: '',
+      content: {},
+      loaded:false,
+      showInput: ''
     }
   },
   beforeCreate() {
     userId = window.localStorage.getItem('userId');
+  },
+  created() {
+    this.$dialog.loading.open('数据加载中');
+    // http://00.37518.com/index.php?m=Mobile&c=Users&a=userCode&userId=
+    let url = `${config.host}index.php?m=Mobile&c=Users&a=userCode&userId=${userId}`
+    this.$http.get(url).then((res) => {
+      this.$dialog.loading.close();
+      this.loaded = true;
+      console.log(res);
+      if (res.body.status == 1) {
+        this.content = res.body;
+        this.showInput = false;
+      } else {
+        this.showInput = true;
+      }
+    });
   },
   methods: {
     handleBack() {
@@ -71,7 +96,7 @@ export default {
         }, (err) => {
           console.log(err);
         });
-      } else{
+      } else {
         this.$dialog.toast({
           icon: 'error',
           mes: '邀请码不能为空',
@@ -113,5 +138,25 @@ input:-ms-input-placeholder {
 input::-webkit-input-placeholder {
   color: #b2b2b2;
   opacity: 1;
+}
+
+.my-leader {
+  text-align: center;
+}
+
+.my-leader h5 {
+  text-align: center;
+  font-size: .35rem;
+}
+
+.my-leader p {
+  text-align: center;
+  font-size: .3rem;
+}
+
+.my-leader img {
+  border-radius: 50%;
+  margin-top:100px;
+  overflow: hidden;
 }
 </style>

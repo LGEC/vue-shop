@@ -1,135 +1,17 @@
 <template>
-<div class="container">
-  <div class="top">
-    <yd-navbar title="我的订单" bgcolor="#d94927" color="#fff">
-      <section slot="left" @click="handleBack">
-        <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
-      </section>
-    </yd-navbar>
-  </div>
-  <div class="order">
-    <yd-tab active-color="#e8380d" :callback="loadingNow">
-
-      <yd-tab-panel label="待发货" tabkey="1">
-        <div class="list">
-          <div class="list-item" v-for="item,key in data1" :key="key">
-            <div class="list-tit">
-              订单号:{{item.orderNo}} <span>{{item.createTime.substr(0,10)}}</span>
-            </div>
-            <div class="list-item-body" v-for="sub,key in item.goodslist" :key="key">
-              <router-link :to="{ name: 'detail', params: {goodsId : sub.goodsId} }">
-                <yd-flexbox>
-                  <div class="goods-img">
-                    <img :src="sub.goodsThums" alt="">
-                  </div>
-                  <yd-flexbox-item class="list-body-right">
-                    <p>{{sub.goodsName}}</p>
-                    <div class="goods-type">
-                      规格：“<span>{{sub.goodsAttrName}}</span>”
-                    </div>
-                    <p class="goods-price">
-                      单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
-                    </p>
-                  </yd-flexbox-item>
-                </yd-flexbox>
-              </router-link>
-            </div>
-
-            <div class="list-item-bot">
-              总计：<i>{{item.totalMoney}} 两</i>
-            </div>
-
-          </div>
-        </div>
-      </yd-tab-panel>
-
-      <!-- <yd-tab-panel label="已发货" tabkey="2">
-        <div class="list">
-          <div class="list-item">
-            <div class="list-tit">
-              订单号:2018461214562455 <span>2018-11-05</span>
-            </div>
-            <div class="list-item-body">
-              <yd-flexbox>
-                <div class="goods-img">
-                  <img src="../assets/img-01.jpg" alt="">
-                </div>
-                <yd-flexbox-item class="list-body-right">
-                  <p>Green Orange/青橙 VOGA 55909 激光投影手机全网通4G</p>
-                  <div class="goods-type">
-                    规格：“<span>4G 64G 草木绿</span>”
-                  </div>
-                  <p class="goods-price">
-                    单价：<i>￥20</i><span>×2</span>
-                  </p>
-                </yd-flexbox-item>
-              </yd-flexbox>
-            </div>
-
-            <div class="list-item-body">
-              <yd-flexbox>
-                <div class="goods-img">
-                  <img src="../assets/img-01.jpg" alt="">
-                </div>
-                <yd-flexbox-item class="list-body-right">
-                  <p>Green Orange/青橙 VOGA 55909 激光投影手机全网通4G</p>
-                  <div class="goods-type">
-                    规格：“<span>4G 64G 草木绿</span>”
-                  </div>
-                  <p class="goods-price">
-                    单价：<i>￥20</i><span>×2</span>
-                  </p>
-                </yd-flexbox-item>
-              </yd-flexbox>
-            </div>
-
-            <div class="list-item-bot">
-              总计：<i>￥122</i> <span>确认收货</span> <span class="yellow">查看物流</span>
-            </div>
-
-          </div>
-        </div>
-      </yd-tab-panel> -->
-
-      <yd-tab-panel label="待签收" tabkey="2">
-        <div class="list">
-          <div class="list-item" v-for="item,key in data2" :key="key">
-            <div class="list-tit">
-              订单号:{{item.orderNo}} <span>{{item.createTime.substr(0,10)}}</span>
-            </div>
-            <div class="list-item-body" v-for="sub,key in item.goodslist" :key="key">
-              <router-link :to="{ name: 'detail', params: {goodsId : sub.goodsId} }">
-                <yd-flexbox>
-                  <div class="goods-img">
-                    <img :src="sub.goodsThums" alt="">
-                  </div>
-                  <yd-flexbox-item class="list-body-right">
-                    <p>{{sub.goodsName}}</p>
-                    <div class="goods-type">
-                      规格：“<span>{{sub.goodsAttrName}}</span>”
-                    </div>
-                    <p class="goods-price">
-                      单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
-                    </p>
-                  </yd-flexbox-item>
-                </yd-flexbox>
-              </router-link>
-            </div>
-
-
-            <div class="list-item-bot">
-              总计：<i>{{item.totalMoney}} 两</i> <span @click="gotGoods" :id="item.orderId">确认收货</span>
-              <!-- <span class="yellow">查看物流</span> -->
-            </div>
-
-          </div>
-        </div>
-      </yd-tab-panel>
-
-      <yd-tab-panel label="已完成" tabkey="3">
-        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
-          <div class="list" slot="list">
-            <div class="list-item" v-for="item,key in data3" :key="key">
+  <div class="container">
+    <div class="top">
+      <yd-navbar title="我的订单" bgcolor="#d94927" color="#fff">
+        <section slot="left" @click="handleBack">
+          <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
+        </section>
+      </yd-navbar>
+    </div>
+    <div class="order">
+      <yd-tab active-color="#e8380d" :callback="loadingNow">
+        <yd-tab-panel :label="'待发货('+nums[0]+')'" tabkey="1">
+          <div class="list">
+            <div class="list-item" v-for="item,key in data1" :key="key">
               <div class="list-tit">
                 订单号:{{item.orderNo}} <span>{{item.createTime.substr(0,10)}}</span>
               </div>
@@ -151,31 +33,95 @@
                   </yd-flexbox>
                 </router-link>
               </div>
-
               <div class="list-item-bot">
                 总计：<i>{{item.totalMoney}} 两</i>
-                <span class="yellow" v-if=" item.isAppraises != 1 ? true : false ">
-                  <router-link :to="{ name: 'comment', query: {orderId:item.orderId} }">
-                    立即评价
-                  </router-link>
-                </span>
               </div>
-
             </div>
           </div>
-          <!-- 数据全部加载完毕显示 -->
-          <span slot="doneTip">啦啦啦，啦啦啦，没有更多啦~~</span>
-
-          <!-- 加载中提示，不指定，将显示默认加载中图标 -->
-          <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
-
-        </yd-infinitescroll>
-      </yd-tab-panel>
-    </yd-tab>
+        </yd-tab-panel>
+        <yd-tab-panel :label="'待签收('+nums[0]+')'" tabkey="2">
+          <div class="list">
+            <div class="list-item" v-for="item,key in data2" :key="key">
+              <div class="list-tit">
+                订单号:{{item.orderNo}} <span>{{item.createTime.substr(0,10)}}</span>
+              </div>
+              <div class="list-tit">
+                物流单号:{{item.orderNum}}
+              </div>
+              <div class="list-item-body" v-for="sub,key in item.goodslist" :key="key">
+                <router-link :to="{ name: 'detail', params: {goodsId : sub.goodsId} }">
+                  <yd-flexbox>
+                    <div class="goods-img">
+                      <img :src="sub.goodsThums" alt="">
+                    </div>
+                    <yd-flexbox-item class="list-body-right">
+                      <p>{{sub.goodsName}}</p>
+                      <div class="goods-type">
+                        规格：“<span>{{sub.goodsAttrName}}</span>”
+                      </div>
+                      <p class="goods-price">
+                        单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                      </p>
+                    </yd-flexbox-item>
+                  </yd-flexbox>
+                </router-link>
+              </div>
+              <div class="list-item-bot">
+                总计：<i>{{item.totalMoney}} 两</i> <span @click="gotGoods" :id="item.orderId">确认收货</span>
+                <span class="yellow" @click="showWuLiu" :id="key">查看物流</span>
+              </div>
+            </div>
+          </div>
+        </yd-tab-panel>
+        <yd-tab-panel :label="'已完成('+nums[0]+')'" tabkey="3">
+          <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+            <div class="list" slot="list">
+              <div class="list-item" v-for="item,key in data3" :key="key">
+                <div class="list-tit">
+                  订单号:{{item.orderNo}} <span>{{item.createTime.substr(0,10)}}</span>
+                </div>
+                <div class="list-tit">
+                  物流单号:{{item.orderNum}}
+                </div>
+                <div class="list-item-body" v-for="sub,key in item.goodslist" :key="key">
+                  <router-link :to="{ name: 'detail', params: {goodsId : sub.goodsId} }">
+                    <yd-flexbox>
+                      <div class="goods-img">
+                        <img :src="sub.goodsThums" alt="">
+                      </div>
+                      <yd-flexbox-item class="list-body-right">
+                        <p>{{sub.goodsName}}</p>
+                        <div class="goods-type">
+                          规格：“<span>{{sub.goodsAttrName}}</span>”
+                        </div>
+                        <p class="goods-price">
+                          单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                        </p>
+                      </yd-flexbox-item>
+                    </yd-flexbox>
+                  </router-link>
+                </div>
+                <div class="list-item-bot">
+                  总计：<i>{{item.totalMoney}} 两</i>
+                  <span v-if=" item.isAppraises != 1 ? true : false ">
+                    <router-link :to="{ name: 'comment', query: {orderId:item.orderId} }">
+                      立即评价
+                    </router-link>
+                  </span>
+                  <span class="yellow" @click="showWuLiu1" :id="key">查看物流</span>
+                </div>
+              </div>
+            </div>
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">啦啦啦，啦啦啦，没有更多啦~~</span>
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+          </yd-infinitescroll>
+        </yd-tab-panel>
+      </yd-tab>
+    </div>
   </div>
-</div>
 </template>
-
 <script>
 import config from '@/config.js';
 let userId;
@@ -183,8 +129,9 @@ export default {
   data() {
     return {
       userId: '',
-      page:1,
-      params:[],
+      page: 1,
+      nums:['--','--','--'],
+      params: [],
       data1: [],
       data2: [],
       data3: []
@@ -195,10 +142,12 @@ export default {
     userId = window.localStorage.getItem('userId');
   },
   created() {
-      this.userId = window.localStorage.getItem('userId');
+    this.getNums();
+    this.userId = window.localStorage.getItem('userId');
     console.log(window.localStorage.getItem('userId'));
     let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryDeliveryByPage&userId=${window.localStorage.getItem('userId')}`;
     console.log(url);
+    this.$dialog.loading.open('数据加载中');
     this.$http.get(url).then((res) => {
       console.log('++++++++');
       console.log(res);
@@ -210,38 +159,49 @@ export default {
         }
       }
       this.data1 = data;
+      this.$dialog.loading.close();
     })
   },
   methods: {
+    getNums(){
+      let url = `${config.host}index.php?m=Mobile&c=Orders&a=orderNum&userId=${window.localStorage.getItem('userId')}`;
+      this.$http.get(url).then(res=>{
+        console.log(res);
+        this.nums = res.body;
+      })
+    },
     handleBack() {
       this.$router.go(-1);
       // console.log(this.$router);
     },
     //确认收货
-    gotGoods(e){
+    gotGoods(e) {
       // console.log(e.target.id);
       let orderId = e.target.id;
       let url = `${config.host}index.php?m=Mobile&c=Orders&a=orderConfirm&userId=${userId}&orderId=${orderId}`;
-      this.$http.get(url).then((res)=>{
-        if(res.body.status == 1){
+      this.$http.get(url).then((res) => {
+        if (res.body.status == 1) {
           this.$dialog.toast({
-            mes:'已确认收货',
-            timeout:1500
+            mes: '已确认收货',
+            timeout: 1500
           });
           window.location.reload();
         } else {
           this.$dialog.toast({
-            mes:'网络异常，请重试！',
-            timeout:1500
+            mes: '网络异常，请重试！',
+            timeout: 1500
           })
         }
       })
     },
     // 选项卡切换时执行的回调，加载切换页得数据
     loadingNow(label, tabkey) {
-      console.log(tabkey);
+      console.log('---------------------------');
+      console.log(tabkey, label);
       // console.log(label, tabkey);
-      if (tabkey == 2) {
+      if (tabkey == 1) {
+        if (this.data2.length == 0) this.$dialog.loading.open('数据加载中');
+        console.log('----------------------------------2');
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryReceiveByPage&userId=${userId}`;
         this.$http.get(url).then((res) => {
           console.log(res.body);
@@ -252,9 +212,11 @@ export default {
             }
           }
           this.data2 = data;
+          this.$dialog.loading.close();
         })
       };
-      if (tabkey == 3) {
+      if (tabkey == 2) {
+        if (this.data3.length == 0) this.$dialog.loading.open('数据加载中');
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryCompleteOrders&userId=${userId}&p=${this.page}`;
         this.$http.get(url).then((res) => {
           console.log(res.body);
@@ -266,11 +228,24 @@ export default {
             }
           }
           this.data3 = data;
+          this.$dialog.loading.close();
         })
       }
     },
+    showWuLiu(e) {
+      let index = e.target.id;
+      console.log(index);
+      let url = `https://www.kuaidi100.com/chaxun?com=${this.data2[index].deliverType}&nu=${this.data2[index].orderNum}`;
+      window.location.href = url;
+    },
+    showWuLiu1(e) {
+      let index = e.target.id;
+      console.log(index);
+      let url = `https://www.kuaidi100.com/chaxun?com=${this.data3[index].deliverType}&nu=${this.data3[index].orderNum}`;
+      window.location.href = url;
+    },
     loadList() {
-      this.page ++ ;
+      this.page++;
       let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryCompleteOrders&userId=${this.userId}&p=${this.page}`;
       this.$http.get(url).then(function(response) {
         const _list = response.body;
@@ -291,8 +266,8 @@ export default {
     }
   }
 }
-</script>
 
+</script>
 <style scoped>
 .list {
   background: #f4f8fe;
@@ -395,4 +370,5 @@ export default {
 .yellow {
   background: #ffae01 !important;
 }
+
 </style>

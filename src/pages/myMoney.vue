@@ -36,11 +36,11 @@
 
   <div class="bot">
     <yd-flexbox>
-      <yd-flexbox-item class="moneyIn">
+      <!-- <yd-flexbox-item class="moneyIn">
         <div @click="handleRecharge">
           充值
         </div>
-      </yd-flexbox-item>
+      </yd-flexbox-item> -->
       <yd-flexbox-item class="moneyOut">
         <router-link to="commission">
           提现

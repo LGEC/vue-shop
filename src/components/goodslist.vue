@@ -8,6 +8,7 @@
       <span class="goods-tit" slot="title">{{item.goodsName}}</span>
       <p class="goods-desc" slot="other">{{item.goodsSpec}}</p>
       <yd-list-other class="goods-price-box" slot="other">
+        <img v-if="item.isDistribut == 1" src="../assets/xiao.png" class="test-xiao" :style="'left:'+(theme!=4?'10px':'0')+'; top:'+(theme!=4?'10px':'7px')"></img>
         <div>
           <span class="goods-price">{{item.goodsPrice}} 两</span>
         </div>
@@ -121,6 +122,12 @@ export default {
 }
 </script>
 <style scoped>
+.test-xiao {
+  position: absolute;
+  left: 10px;
+  top:10px;
+  width:32px;
+}
 .goods-tit {
   color: #353535;
   font-size: .28rem;
