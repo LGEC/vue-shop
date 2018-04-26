@@ -12,11 +12,11 @@ export default {
   data () {
     return {
       grides: [
-        // {
-        //   name: "积分兑换",
-        //   icon: require("../assets/icon-grides1.png"),
-        //   link: "/pointMarket"
-        // },
+        {
+          name: "成为分销商",
+          icon: require("../assets/icon-grides1.png"),
+          link: "/pointMarket"
+        },
         {
           name: "银子明细",
           icon: require("../assets/icon-grides2.png"),
@@ -50,7 +50,8 @@ export default {
 }
 
 .yd-grids-4 .yd-grids-item {
-  width:33.33333333%;
+  width:25%;
   box-sizing: border-box;
 }
+
 </style>

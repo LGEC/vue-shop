@@ -38,28 +38,28 @@ export default {
       default: 3
     },
     url: {
-      default:''
+      default: ''
     },
     isSearch: {
-      default:''
+      default: ''
     }
   },
   data() {
     return {
-      isShow:false,
-      data:[]
+      isShow: false,
+      data: []
     }
   },
 
-  watch:{
-    url(){
+  watch: {
+    url() {
       this.data = [];
       console.log(this.url);
       let self = this;
-      this.page = 1 ;
-      this.pageSize = 10 ;
+      this.page = 1;
+      this.pageSize = 10;
       console.log(this.url);
-      self.$http.get(`${this.url}${this.page}`).then( res => {
+      self.$http.get(`${this.url}${this.page}`).then(res => {
         console.log(res.body);
         this.page++;
         let data = res.body;
@@ -67,7 +67,7 @@ export default {
           data[i].goodsImg = config.host + data[i].goodsImg;
         };
         this.data.push(...data);
-        if(data.length == 0 && this.isSearch == 1){
+        if (data.length == 0 && this.isSearch == 1) {
           this.isShow = true;
         }
         // console.log(data);
@@ -76,22 +76,24 @@ export default {
   },
   created() {
     let self = this;
-    this.page = 1 ;
-    this.pageSize = 10 ;
-    console.log(this.url);
-    self.$http.get(`${this.url}${this.page}`).then( res => {
-      console.log(res.body);
-      this.page++;
-      let data = res.body;
-      for (let i = 0; i < data.length; i++) {
-        data[i].goodsImg = config.host + data[i].goodsImg;
-      };
-      this.data.push(...data);
-      if(data.length == 0 && this.isSearch == 1){
-        this.isShow = true;
-      }
-      // console.log(data);
-    });
+    this.page = 1;
+    this.pageSize = 10;
+    if (this.url) {
+      self.$http.get(`${this.url}${this.page}`).then(res => {
+        console.log(res.body);
+        this.page++;
+        let data = res.body;
+        for (let i = 0; i < data.length; i++) {
+          data[i].goodsImg = config.host + data[i].goodsImg;
+        };
+        this.data.push(...data);
+        if (data.length == 0 && this.isSearch == 1) {
+          this.isShow = true;
+        }
+        // console.log(data);
+      });
+    }
+
 
   },
   methods: {
@@ -125,15 +127,17 @@ export default {
 .test-xiao {
   position: absolute;
   left: 10px;
-  top:10px;
-  width:32px;
+  top: 10px;
+  width: 32px;
 }
+
 .goods-tit {
   color: #353535;
   font-size: .28rem;
   font-weight: normal;
 }
-.isShow{
+
+.isShow {
   line-height: .5rem;
   color: #999;
   font-size: .24rem;
@@ -141,6 +145,7 @@ export default {
   padding: 0 .2rem;
   margin-top: .2rem;
 }
+
 .goods-desc {
   width: 100%;
   height: 0.6rem;

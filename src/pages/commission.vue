@@ -19,6 +19,11 @@
         </yd-cell-item>
 
         <yd-cell-item>
+          <span slot="left">开户行：</span>
+          <yd-input slot="right" v-model="openHang" regex="" placeholder="请输入开户行"></yd-input>
+        </yd-cell-item>
+
+        <yd-cell-item>
           <span slot="left">姓名：</span>
           <yd-input slot="right" v-model="userName" regex="" placeholder="请输入持卡人姓名"></yd-input>
         </yd-cell-item>
@@ -58,6 +63,7 @@ export default {
       userName: '',
       money: '',
       pwd: '',
+      openHang:'',
       service: '--'
     }
   },
@@ -84,6 +90,11 @@ export default {
           mes: '卡号不能为空！',
           timeout: 1500
         });
+      }else if(!this.openHang){
+        this.$dialog.toast({
+          mes: '开户行不能为空！',
+          timeout: 1500
+        });
       } else if (!this.userName) {
         this.$dialog.toast({
           mes: '姓名不能为空！',
@@ -100,7 +111,7 @@ export default {
           timeout: 1500
         });
       } else {
-        let url = `${config.host}index.php?m=Mobile&c=CashDraws&a=drawsCashByUser&userId=${userId}&payPwd=${this.pwd}&drawMoney=${this.money}&accNo=${this.cardNum}&accUser=${this.userName}`;
+        let url = `${config.host}index.php?m=Mobile&c=CashDraws&a=drawsCashByUser&userId=${userId}&payPwd=${this.pwd}&drawMoney=${this.money}&accNo=${this.cardNum}&accUser=${this.userName}&openHang=${this.openHang}`;
         this.$http.get(url).then(res => {
           console.log(res);
           if (res.body.status == 1) {

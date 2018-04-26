@@ -4,7 +4,7 @@
   <navIndex></navIndex>
   <!-- 头部 end-->
   <!-- 轮播图 -->
-  <banner></banner>
+  <banner :banners="banners"></banner>
   <!-- 轮播图 end-->
   <!-- 滚动公告 -->
   <router-link :to="{name:'messages',params:{userId:userId}}">
@@ -44,50 +44,44 @@ import config from '@/config.js';
 export default {
   data() {
     return {
+      banners: [],
       userId: '',
       specials: [],
       mjTest: '',
-      url: `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`,
+      url: ``,
     }
   },
   beforeCreate() {
     this.$http.get(`${config.host}index.php?m=Mobile&c=Users&a=getUserId`).then(res => {
-      // window.localStorage.setItem('userId', res.body);
-      window.localStorage.setItem('userId', 136);
+      window.localStorage.setItem('userId', res.body);
+      // window.localStorage.setItem('userId', 136);
       this.userId = window.localStorage.getItem('userId');
     });
   },
   created() {
     let self = this;
     let specialUrl = `${config.host}index.php?m=Mobile&c=Index&a=Ads&rows=20`;
+    let url = `${config.host}index.php?m=Mobile&c=Index&a=BannerPic`;
 
-
-    //"files.autoSave":"onFocusChange"
-    // this.$http.get('http://00.37518.com/index.php?m=Mobile&c=Users&a=login').then(res => {
-    //   console.log('-------------------');
-    //   console.log(res);
-    //   self.mjTest1 = JSON.stringify(res);
-    //   console.log('-------------------');
-    // }, err => {
-    //   self.mjTest1 = JSON.stringify(err);
-    //   console.log('+++++++++++++++++++++++++');
-    //   console.log(err)
-    // });
-    //
-    // let $redirect_uri = encodeURI('http://00.37518.com/getUserInfo.php');
-    // let $url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx38f7030c7accb4d8&redirect_uri=$redirect_uri&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect`;
-    // this.$http.get($url).then(res => {
-    //   self.mjTest2 = JSON.stringify(res);
-    // }, err => {
-    //   self.mjTest2 = JSON.stringify(err);
-    // });
     this.$dialog.loading.open('数据加载中');
-    this.$http.get(specialUrl).then(res => {
-      let temp = res.body;
-      // console.log(temp);
-      self.specials.push(...temp);
+    this.$http.get(url).then((res) => {
+      let data = res.body;
+      this.banners.push(...data);
       this.$dialog.loading.close();
-      // console.log(self.specials);
+      this.$http.get(specialUrl).then(res => {
+        let temp = res.body;
+        self.specials.push(...temp);
+        this.url = `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`;
+      });
+    }, (error) => {
+      console.log(`获取数据失败：${error}`);
+      this.$http.get(specialUrl).then(res => {
+        let temp = res.body;
+        // console.log(temp);
+        self.specials.push(...temp);
+        this.url = `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`;
+        // console.log(self.specials);
+      });
     });
   }
 }
@@ -114,6 +108,7 @@ export default {
   padding: 0 .1rem;
   position: relative;
   z-index: 3;
+
 }
 
 .goods-sug-tit span::before {

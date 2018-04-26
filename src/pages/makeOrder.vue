@@ -142,7 +142,7 @@
 
 <script>
 import config from '@/config.js';
-let userId;
+let userId,allowPaymat=true;
 export default {
   data() {
     return {
@@ -237,6 +237,8 @@ export default {
       this.show = false;
     },
     confirmOrder1() {
+      if(!allowPaymat) return true;
+      allowPaymat = false;
       window.mjOrderData = null;
       window.mjType = null;
       if (!this.orderData.defaultAddress) {

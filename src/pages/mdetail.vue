@@ -133,11 +133,14 @@ export default {
   created() {
     let self = this,
       goodsId = this.$route.params.goodsId;
+    userId = window.localStorage.getItem('userId');
+    console.log(userId);
+    console.log('----------------------------------------------------------------+++++++++++++++++++++++++++++');
     let test = `${config.host}index.php?m=Mobile&c=convert&a=getConvertGoodsDetails&goodsId=${goodsId}&userId=136`;
 
     // http://00.37518.com/index.php?m=Mobile&c=convert&a=getConvertGoodsDetails&goodsId=@value&p=@value
 
-    let url = `${config.host}index.php?m=Mobile&c=convert&a=getConvertGoodsDetails&goodsId=${goodsId}&userId=${userId}&p=`;
+    let url = `${config.host}index.php?m=Mobile&c=convert&a=getConvertGoodsDetails&goodsId=${goodsId}&userId=${userId}`;
     console.log('--------------------------');
     console.log(url);
     console.log('--------------------------');
@@ -190,8 +193,8 @@ export default {
     spinner: function(now) {
       console.log(now);
       // this.spinner = now.replace(/^[0-9]/g,'');
-      if(now>this.attrStock*1) this.spinner = this.attrStock;
-      if(now <= 0) this.spinner = 1;
+      // if(now>this.attrStock*1) this.spinner = this.attrStock;
+      // if(now <= 0) this.spinner = 1;
       this.totalPrice = parseFloat(this.data.goodsAttrs[this.radio].attrPrice) * now;
       this.totalPrice = this.totalPrice.toFixed(2);
       // console.log(this.totalPrice);
@@ -259,81 +262,77 @@ export default {
       })
     },
     buyNow() {
-      if (this.attrStock * 1 <= 0) {
-        this.$dialog.toast({
-          mes: '该商品库存不足',
-          timeout: 1500
-        });
-      } else {
-        let goodsId = parseInt(this.data.goodsId),
-          goodsCnt = this.spinner,
-          goodsAttrId = parseInt(this.data.goodsAttrs[this.radio].id);
-        // console.log(userId, goodsId, goodsCnt, goodsAttrId);
 
-        //把数据放进orderData中
-        this.orderData.userId = userId;
-        this.orderData.goodsData = [];
-        this.orderData.goodsData.push({
-          goodsId: goodsId, //商品ID
-          goodsAttrId: goodsAttrId, //属性ID
-          cnt: goodsCnt, //数量
+      let goodsId = parseInt(this.data.goodsId),
+        goodsCnt = this.spinner,
+        goodsAttrId = parseInt(this.data.goodsAttrs[this.radio].id);
+      // console.log(userId, goodsId, goodsCnt, goodsAttrId);
 
-          goodsName: this.data.goodsName, //商品名字
-          goodsPrice: this.totalAttrPrice, //已选规格的单价
-          goodsThums: config.host + this.data.goodsThums, //图片
-          goodsAttr: this.totalAttr, //已选规格
-          shopName: this.data.shopName //店铺名字
+      //把数据放进orderData中
+      console.log(userId);
+      this.orderData.userId = userId;
+      this.orderData.goodsData = [];
+      this.orderData.goodsData.push({
+        goodsId: goodsId, //商品ID
+        goodsAttrId: goodsAttrId, //属性ID
+        cnt: goodsCnt, //数量
 
-        });
+        goodsName: this.data.goodsName, //商品名字
+        goodsPrice: this.totalAttrPrice, //已选规格的单价
+        goodsThums: config.host + this.data.goodsThums, //图片
+        goodsAttr: this.totalAttr, //已选规格
+        shopName: this.data.shopName //店铺名字
 
-        console.log(this.orderData);
+      });
 
-        console.log(this.orderData);
-        let url = `${config.host}index.php?m=Mobile&c=Orders&a=checkOrderInfo&type=3`;
-        this.$http.post(url, this.orderData, {
-          emulateJSON: true
-        }).then((res) => {
-          console.log(res);
-          let data = res.body;
+      console.log(this.orderData);
 
-          this.orderData.defaultAddress = data.defaultAddress; //默认地址
-          this.orderData.addressId = data.defaultAddress.addressId; //默认地址ID
-          this.orderData.orderIds = data.orderIds; //订单ID
-          this.orderData.totalMoney = data.totalMoney; //商品价格
-          this.orderData.deliverMoney = data.deliverMoney; //邮费
-          this.orderData.realTotalMoney = data.realTotalMoney; //总价
+      console.log(this.orderData);
+      let url = `${config.host}index.php?m=Mobile&c=Orders&a=checkOrderInfo&type=3`;
+      this.$http.post(url, this.orderData, {
+        emulateJSON: true
+      }).then((res) => {
+        console.log(res);
+        let data = res.body;
+
+        this.orderData.defaultAddress = data.defaultAddress; //默认地址
+        this.orderData.addressId = data.defaultAddress.addressId; //默认地址ID
+        this.orderData.orderIds = data.orderIds; //订单ID
+        this.orderData.totalMoney = data.totalMoney; //商品价格
+        this.orderData.deliverMoney = data.deliverMoney; //邮费
+        this.orderData.realTotalMoney = data.realTotalMoney; //总价
 
 
 
 
-          this.$dialog.loading.open('正在生成订单...');
-          setTimeout(() => {
-            this.$dialog.loading.close();
-          }, 500);
+        this.$dialog.loading.open('正在生成订单...');
+        setTimeout(() => {
+          this.$dialog.loading.close();
+        }, 500);
 
-          if (data.status == 1) {
-            // console.log(this.orderData);
-            this.$router.push({
-              name: 'makeOrder',
-              query: {
-                data: this.orderData,
-                mjtype: 1
-              }
-            });
+        if (data.status == 1) {
+          // console.log(this.orderData);
+          this.$router.push({
+            name: 'makeOrder',
+            query: {
+              data: this.orderData,
+              mjtype: 1
+            }
+          });
 
-          } else if (data.status == -1) {
-            this.$dialog.toast({
-              mes: res.data.msg,
-              timeout: 1500
-            });
-          } else(
-            this.$dialog.toast({
-              mes: '网络异常，请重试！',
-              timeout: 1500
-            })
-          )
-        });
-      }
+        } else if (data.status == -1) {
+          this.$dialog.toast({
+            mes: res.data.msg,
+            timeout: 1500
+          });
+        } else(
+          this.$dialog.toast({
+            mes: '网络异常，请重试！',
+            timeout: 1500
+          })
+        )
+      });
+
     }
   }
 }

@@ -12,9 +12,6 @@
             <yd-flexbox-item>
               <p class="name">{{data.loginName}}</p>
               <p class="id">ID: {{data.loginId}}</p>
-              <router-link :to="{name:'pointMarket'}" v-if="data.userType!=2">
-                <yd-button size="small" type="warning" shape="square">成为分销商</yd-button>
-              </router-link>
             </yd-flexbox-item>
             <div class="qrcode">
               <router-link :to="{name:'shareQR', query: { userRqcode: data.userRqcode,loginSecret: data.loginSecret}}">

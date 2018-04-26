@@ -26,6 +26,10 @@
         <div slot="right">{{item.accNo}}</div>
       </yd-preview-item>
       <yd-preview-item>
+        <div slot="left">开户行</div>
+        <div slot="right">{{item.accBank}}</div>
+      </yd-preview-item>
+      <yd-preview-item>
         <div slot="left">手续费</div>
         <div slot="right">{{item.chargeMoney}}</div>
       </yd-preview-item>

@@ -21,8 +21,8 @@ let test = new Vue({
       console.log('------------');
       console.log(res.body);
       console.log('------------');
-      // window.localStorage.setItem('userId', res.body);
-      window.localStorage.setItem('userId', 136);
+      window.localStorage.setItem('userId', res.body);
+      // window.localStorage.setItem('userId', 136);
       this.$dialog.loading.close();
     });
   }

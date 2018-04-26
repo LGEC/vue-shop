@@ -27,8 +27,8 @@
       <div class="contact">
         <p class="shop-name">{{data.shopName}}</p>
         <p class="shop-area">所在地区：<span>{{data.shopAddress}}</span></p>
-        <p class="shop-tel">联系方式：<span>{{data.shopTel}}</span></p>
-        <p class="shop-tel" v-if="data.qqNo !== '' ">Q Q客服：<span>{{data.qqNo}}</span></p>
+        <p class="shop-tel">联系方式：<a :href="tel">{{data.shopTel}}</a></p>
+        <p class="shop-tel" v-if="data.qqNo !== '' ">Q Q客服：<a :href="qq">{{data.qqNo}}</a></p>
       </div>
 
       <div class="goods-list">
@@ -49,6 +49,8 @@ export default {
   data(){
     return{
       url:``,
+      qq:'',
+      tel:'',
       data:{}
     }
   },
@@ -60,6 +62,8 @@ export default {
       let data = res.body;
       data.shopBanner = `url(${config.host}${data.shopBanner})`;
       this.data = data;
+      this.qq = 'tencent://message/?uin='+data.qqNo+'&Site=400301.com&Menu=yes';
+      this.tel = 'tel:'+data.shopTel;
       // console.log(this.data);
     },(error)=>{
       //错误回调
