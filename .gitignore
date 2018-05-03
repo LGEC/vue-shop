@@ -10,6 +10,8 @@ yarn-error.log*
 /test/e2e/reports/
 selenium-debug.log
 src/config.js
+dist.zip
+dist1.zip
 
 
 # Editor directories and files

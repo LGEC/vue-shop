@@ -47,14 +47,14 @@
                       规格：“<span>{{sub.goodsAttrName}}</span>”
                     </div>
                     <p class="goods-price">
-                      单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                      单价：<i>{{sub.goodsPrice}} {{item.payType == 2 ? '两' : '元'}}</i><span>×{{sub.goodsNums}}</span>
                     </p>
                   </yd-flexbox-item>
                 </yd-flexbox>
               </router-link>
             </div>
             <div class="list-item-bot">
-              总计：<i>{{item.totalMoney}} 两</i> <span class="gray" @click="cancelOrder" :id="item.orderId">取消订单</span>
+              总计：<i>{{item.totalMoney}} {{item.payType == 2 ? '两' : '元'}}</i> <span class="gray" @click="cancelOrder" :id="item.orderId">取消订单</span>
             </div>
           </div>
         </div>
@@ -80,14 +80,14 @@
                       规格：“<span>{{sub.goodsAttrName}}</span>”
                     </div>
                     <p class="goods-price">
-                      单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                      单价：<i>{{sub.goodsPrice}} {{item.payType == 2 ? '两' : '元'}}</i><span>×{{sub.goodsNums}}</span>
                     </p>
                   </yd-flexbox-item>
                 </yd-flexbox>
               </router-link>
             </div>
             <div class="list-item-bot">
-              总计：<i>{{item.totalMoney}} 两</i> <span @click="gotGoods" :id="item.orderId">确认收货</span>
+              总计：<i>{{item.totalMoney}} {{item.payType == 2 ? '两' : '元'}}</i> <span @click="gotGoods" :id="item.orderId">确认收货</span>
               <span class="yellow" @click="showWuLiu" :id="key">查看物流</span>
               <span class="gray" @click="handleRefund" :id="item.orderId">退货</span>
             </div>
@@ -116,14 +116,14 @@
                         规格：“<span>{{sub.goodsAttrName}}</span>”
                       </div>
                       <p class="goods-price">
-                        单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                        单价：<i>{{sub.goodsPrice}} {{item.payType == 2 ? '两' : '元'}}</i><span>×{{sub.goodsNums}}</span>
                       </p>
                     </yd-flexbox-item>
                   </yd-flexbox>
                 </router-link>
               </div>
               <div class="list-item-bot">
-                总计：<i>{{item.totalMoney}} 两</i>
+                总计：<i>{{item.totalMoney}} {{item.payType == 2 ? '两' : '元'}}</i>
                 <span v-if=" item.isAppraises != 1 ? true : false ">
                     <router-link :to="{ name: 'comment', query: {orderId:item.orderId} }">
                       立即评价

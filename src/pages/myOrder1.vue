@@ -50,7 +50,7 @@
                       规格：“<span>{{sub.goodsAttrName}}</span>”
                     </div>
                     <p class="goods-price">
-                      单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                      单价：<i>{{sub.goodsPrice}} 元</i><span>×{{sub.goodsNums}}</span>
                     </p>
                   </yd-flexbox-item>
                 </yd-flexbox>
@@ -58,7 +58,7 @@
             </div>
 
             <div class="list-item-bot">
-              总计：<i>{{item.totalMoney}} 两</i> <span class="gray" @click="cancelOrder" :id="item.orderId">取消订单</span>
+              总计：<i>{{item.totalMoney}} 元</i> <span class="gray" @click="cancelOrder" :id="item.orderId">取消订单</span>
             </div>
 
           </div>
@@ -134,7 +134,7 @@
                       规格：“<span>{{sub.goodsAttrName}}</span>”
                     </div>
                     <p class="goods-price">
-                      单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                      单价：<i>{{sub.goodsPrice}} 元</i><span>×{{sub.goodsNums}}</span>
                     </p>
                   </yd-flexbox-item>
                 </yd-flexbox>
@@ -143,7 +143,7 @@
 
 
             <div class="list-item-bot">
-              总计：<i>{{item.totalMoney}} 两</i>
+              总计：<i>{{item.totalMoney}} 元</i>
               <span v-if="item.orderStatus!=4" @click="gotGoods" :id="item.orderId">确认收货</span>
               <span class="yellow" @click="showWuLiu" :id="key">查看物流</span>
               <span v-if="item.orderStatus!=4" class="gray" @click="handleRefund" :id="item.orderId">退货</span>
@@ -172,7 +172,7 @@
                         规格：“<span>{{sub.goodsAttrName}}</span>”
                       </div>
                       <p class="goods-price">
-                        单价：<i>{{sub.goodsPrice}} 两</i><span>×{{sub.goodsNums}}</span>
+                        单价：<i>{{sub.goodsPrice}} 元</i><span>×{{sub.goodsNums}}</span>
                       </p>
                     </yd-flexbox-item>
                   </yd-flexbox>
@@ -180,7 +180,7 @@
               </div>
 
               <div class="list-item-bot">
-                总计：<i>{{item.totalMoney}} 两</i>
+                总计：<i>{{item.totalMoney}} 元</i>
                 <span class="yellow" v-if=" item.isAppraises != 1 ? true : false ">
                   <router-link :to="{ name: 'comment', query: {orderId:item.orderId} }">
                     立即评价

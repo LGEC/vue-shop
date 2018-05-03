@@ -27,7 +27,7 @@
       </div>
       <div class="goods-desc"> {{data.goodsSpec}}
       </div>
-      <div class="goods-price">{{data.shopPrice}} 两<span class="goods-sales">&nbsp; 已售: {{data.saleCount}}</span>
+      <div class="goods-price">{{data.shopPrice}} 元<span class="goods-sales">&nbsp; 已售: {{data.saleCount}}</span>
       </div>
     </div>
     <div class="table-box">
@@ -65,7 +65,7 @@
     <yd-popup v-model="show" position="bottom" height="60%">
       <div class="choose-top" slot="top">
         <p class="choose-tit">{{data.goodsName}}</p>
-        <p class="choosed">已选：“<span>{{totalAttr}} ， {{spinner}} ， <i>{{totalPrice}} 两</i></span>”</p>
+        <p class="choosed">已选：“<span>{{totalAttr}} ， {{spinner}} ， <i>{{totalPrice}} 元</i></span>”</p>
       </div>
       <div class="choose-cen">
         <div class="choose-type">

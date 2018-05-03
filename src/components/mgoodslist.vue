@@ -9,7 +9,7 @@
       <p class="goods-desc" slot="other">{{item.goodsSpec}}</p>
       <yd-list-other class="goods-price-box" slot="other">
         <div>
-          <span class="goods-price">{{item.goodsPrice}} 两</span>
+          <span class="goods-price">{{item.goodsPrice}} 元</span>
         </div>
         <div class="goods-sales">已售：{{item.saleCount}}</div>
       </yd-list-other>

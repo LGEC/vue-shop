@@ -81,7 +81,7 @@
               规格：“<span>{{item.goodsAttr}}</span>”
             </div>
             <p class="goods-price">
-              单价：<i>{{item.goodsPrice}} 两</i><span>×{{item.cnt}}</span>
+              单价：<i>{{item.goodsPrice}} {{mjtype?'两':'元'}}</i><span>×{{item.cnt}}</span>
             </p>
           </yd-flexbox-item>
         </yd-flexbox>
@@ -98,12 +98,12 @@
 
       <yd-cell-item>
         <span slot="left">商品总价</span>
-        <span slot="right">{{orderData.totalMoney}} 两</span>
+        <span slot="right">{{orderData.totalMoney}} {{mjtype?'两':'元'}}</span>
       </yd-cell-item>
 
       <yd-cell-item>
         <span slot="left">邮费</span>
-        <span slot="right">{{orderData.deliverMoney}} 两</span>
+        <span slot="right">{{orderData.deliverMoney}} {{mjtype?'两':'元'}}</span>
       </yd-cell-item>
 
     </yd-cell-group>
@@ -127,7 +127,7 @@
   <div class="fixed-bot">
     <yd-flexbox>
       <yd-flexbox-item>
-        <p class="bot-left">总计：<span>{{adTotalMoney}}   两</span></p>
+        <p class="bot-left">总计：<span>{{adTotalMoney}}   {{mjtype?'两':'元'}}</span></p>
       </yd-flexbox-item>
       <div class="sure-btn" @click="confirmOrder1" v-if="mjtype">
         余额支付
@@ -170,6 +170,7 @@ export default {
     }
   },
   created() {
+    allowPaymat = true;
     console.log(this.$route.query.mjtype);
     console.log('-------------------------------------');
     console.log(window.mjOrderData);
