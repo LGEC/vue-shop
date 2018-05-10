@@ -16,7 +16,7 @@
             {{ item.goodsSpec }}
           </div>
           <p class="goods-price">
-            <span>{{item.goodsPrice}} 两</span>
+            <span>{{item.goodsPrice}} 元</span>
             <!-- <span v-if="item.price.length == 2">&yen;{{item.price[0]}}+<i>฿</i>{{item.price[1]}}</span> -->
           </p>
         </div>

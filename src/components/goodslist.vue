@@ -10,7 +10,7 @@
       <yd-list-other class="goods-price-box" slot="other">
         <img v-if="item.isDistribut == 1" src="../assets/xiao.png" class="test-xiao" :style="'left:'+(theme!=4?'10px':'0')+'; top:'+(theme!=4?'10px':'7px')"></img>
         <div>
-          <span class="goods-price">{{item.goodsPrice}} 两</span>
+          <span class="goods-price">{{item.goodsPrice}} 元</span>
         </div>
         <div class="goods-sales">已售：{{item.saleCount}}</div>
       </yd-list-other>
