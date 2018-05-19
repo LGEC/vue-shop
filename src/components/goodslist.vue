@@ -4,7 +4,7 @@
   <yd-list :theme="theme" slot="list">
 
     <yd-list-item type="link" :href="{name:'detail',params:{goodsId: item.goodsId}}" v-for="item, key in data" :key="key">
-      <img slot="img" :src="item.goodsImg">
+      <img slot="img" v-lazy="item.goodsImg">
       <span class="goods-tit" slot="title">{{item.goodsName}}</span>
       <p class="goods-desc" slot="other">{{item.goodsSpec}}</p>
       <yd-list-other class="goods-price-box" slot="other">

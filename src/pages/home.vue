@@ -41,6 +41,8 @@
 
 <script>
 import config from '@/config.js';
+//注册专题组件
+import special from "@/components/special";
 export default {
   data() {
     return {
@@ -58,31 +60,35 @@ export default {
       this.userId = window.localStorage.getItem('userId');
     });
   },
-  created() {
+  mounted() {
     let self = this;
     let specialUrl = `${config.host}index.php?m=Mobile&c=Index&a=Ads&rows=20`;
     let url = `${config.host}index.php?m=Mobile&c=Index&a=BannerPic`;
-
     this.$dialog.loading.open('数据加载中');
-    this.$http.get(url).then((res) => {
-      let data = res.body;
-      this.banners.push(...data);
+    console.log('::::::::::::::::::::::startrequest');
+    let startTime = new Date().getTime();
+    if(!window.indexBanners){
+      this.$http.get(url).then((res) => {
+        window.indexBanners = res.body;
+        this.banners.push(...res.body);
+        this.$dialog.loading.close();
+      });
+    }else{
+      this.banners.push(...window.indexBanners);
       this.$dialog.loading.close();
+    }
+    if(!window.specialDatas){
       this.$http.get(specialUrl).then(res => {
-        let temp = res.body;
-        self.specials.push(...temp);
-        this.url = `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`;
+        let temp = res.body || [];
+        this.specials.push(...temp);
       });
-    }, (error) => {
-      console.log(`获取数据失败：${error}`);
-      this.$http.get(specialUrl).then(res => {
-        let temp = res.body;
-        // console.log(temp);
-        self.specials.push(...temp);
-        this.url = `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`;
-        // console.log(self.specials);
-      });
-    });
+    }else{
+      this.specials.push(...window.specialDatas);
+    }
+    this.url = `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`;
+  },
+  components:{
+    special
   }
 }
 </script>

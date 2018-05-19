@@ -1,13 +1,13 @@
 <template>
 <div class="scroll-list">
-  <div class="top autoimg" :style="{ backgroundImage : 'url(' + specialData.adFile + ')' }">
+  <div class="top autoimg" :style="{ backgroundImage : 'url(' + baseurl + specialData.adFile + ')' }">
     <!-- <img :src="specialData.img" alt=""> -->
   </div>
   <swiper :options="swiperOption" class="slist-box">
     <swiper-slide class="list-item" v-for="(item,index) of specialData.goodsChilds" :key="index">
       <router-link :to="{name:'detail',params:{goodsId: item.goodsId}}">
         <img v-if="item.isDistribut == 1" src="../assets/xiao.png" class="test-xiao"></img>
-        <div class="goods-img autoimg" :style="{ backgroundImage : 'url(' + item.goodsImg + ')' }">
+        <div class="goods-img autoimg" :style="{ backgroundImage : 'url(' + baseurl + item.goodsImg + ')' }">
           <!-- 商品小图 -->
         </div>
         <div class="goods-info">
@@ -27,9 +27,15 @@
 </template>
 <script>
 import config from '@/config.js';
+let tempDatas;
+const deepClone=(obj)=>{
+  var proto=Object.getPrototypeOf(obj);
+  return Object.assign({},Object.create(proto),obj);
+}
 export default {
   data() {
     return {
+      baseurl:config.host,
       swiperOption: {
         slidesPerView: 2.5,
         spaceBetween: 10,
@@ -44,15 +50,26 @@ export default {
   },
   props: {
     specialData: {
-      default: []
+      type:Object,
+      default: {}
     }
   },
   created() {
-    let self = this;
-    // console.log(self.specialData.goodsChilds.length);
-    self.specialData.adFile = config.host + self.specialData.adFile;
-    for (let i = 0; i < self.specialData.goodsChilds.length; i++) {
-      self.specialData.goodsChilds[i].goodsImg = config.host + self.specialData.goodsChilds[i].goodsImg;
+    tempDatas = deepClone(this.specialData);
+    this.specialData = {};
+    console.log(tempDatas);
+  },
+  mounted(){
+    if(tempDatas.goodsChilds.length >3){
+      let tempData = deepClone(tempDatas);
+      tempData.goodsChilds = tempData.goodsChilds.slice(0,3);
+      this.specialData = tempData;
+      console.log(this.specialData);
+      setTimeout(()=>{
+        this.specialData = tempDatas;
+      },2000)
+    }else{
+      this.specialData = tempDatas;
     }
   }
 }

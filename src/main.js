@@ -7,9 +7,11 @@ import router from './router'
 import VueResource from 'vue-resource'
 import YDUI from 'vue-ydui'
 import 'vue-ydui/dist/ydui.rem.css'
+import lazyload from 'vue-lazyload'
 
 Vue.use(YDUI);
 Vue.use(VueResource);
+Vue.use(lazyload);
 
 // Vue.use(Vuex);
 let test = new Vue({

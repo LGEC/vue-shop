@@ -3,7 +3,7 @@
   <yd-slider autoplay="3000" style="height:3rem;">
     <yd-slider-item v-for="(banner,key,index) in banners" :key="index">
       <a v-bind:href="banner.adUrl">
-          <img v-bind:src=" host + banner.adFile">
+          <img :src=" host + banner.adFile">
         </a>
     </yd-slider-item>
   </yd-slider>

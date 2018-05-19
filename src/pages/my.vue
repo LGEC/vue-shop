@@ -110,24 +110,43 @@ export default {
   beforeCreate() {
     userId = window.localStorage.getItem('userId');
   },
-  created: function() {
-    this.$dialog.loading.open('数据加载中');
-    // `this` 指向 vm 实例
-    console.log(this.GLOBAL);
+  mounted: function() {
     let url = `${config.host}index.php?m=Mobile&c=Users&a=getUserById&userId=${userId}`
-    this.$http.get(url).then((res) => {
-      console.log(res);
-      let data = res.body;
+    if(!window.myDatas){
+      this.$dialog.loading.open('数据加载中');
+      // `this` 指向 vm 实例
+      console.log(this.GLOBAL);
+      this.$http.get(url).then((res) => {
+        console.log(res);
+        let data = res.body;
+        window.myDatas = data;
+        data.userPhoto = data.userPhoto;
+        this.userRqcode = data.userRqcode;
+        this.loginSecret = data.loginSecret;
+        this.data = data;
+        this.isPay = data.isPay == 1 ? true : false;
+        this.isLabel = data.isLabel;
+        this.$dialog.loading.close();
+      })
+    }else{
+      let data = window.myDatas;
       data.userPhoto = data.userPhoto;
       this.userRqcode = data.userRqcode;
       this.loginSecret = data.loginSecret;
       this.data = data;
-      console.log(this.data);
       this.isPay = data.isPay == 1 ? true : false;
       this.isLabel = data.isLabel;
-      this.$dialog.loading.close();
-      // this.thref = `/pwdManager?isPay=${data.isPay}`
-    })
+      this.$http.get(url).then((res) => {
+        let data = res.body;
+        window.myDatas = data;
+        data.userPhoto = data.userPhoto;
+        this.userRqcode = data.userRqcode;
+        this.loginSecret = data.loginSecret;
+        this.data = data;
+        this.isPay = data.isPay == 1 ? true : false;
+        this.isLabel = data.isLabel;
+      })
+    }
   },
   methods: {
     handleGoToMyMoney() {

@@ -2,38 +2,38 @@ import Vue from 'vue'
 import Router from 'vue-router'
 //首页
 import home from '@/pages/home'
-import shop from '@/pages/shop'
-import detail from '@/pages/detail'
-import mdetail from '@/pages/mdetail'
+const shop = () => import('@/pages/shop');
+const detail = () => import('@/pages/detail');
+const mdetail = () => import('@/pages/mdetail');
 //积分兑换
-import pointMarket from '@/pages/pointMarket'
+const pointMarket = () => import('@/pages/pointMarket');
 //分类
-import goodsClass from '@/pages/goodsClass'
+const goodsClass = () => import('@/pages/goodsClass');
 //购物车
-import shopcar from '@/pages/shopcar'
+const shopcar = () => import('@/pages/shopcar');
 //搜索
-import search from '@/pages/search'
+const search = () => import('@/pages/search');
 //个人中心
-import my from '@/pages/my'
-import shareQR from '@/pages/shareQR'
-import myOrder from '@/pages/myOrder'
-import myOrder1 from '@/pages/myOrder1'
-import collect from '@/pages/collect'
-import messages from '@/pages/messages'
-import msgInfo from '@/pages/msgInfo'
-import mySub from '@/pages/mySub'
-import myInfo from '@/pages/myInfo'
-import myLeader from '@/pages/myLeader'
-import historyCommission from '@/pages/historyCommission'
-import address from '@/pages/address'
-import addAddress from '@/pages/addAddress'
-import contact from '@/pages/contact'
-import myPoint from '@/pages/myPoint'
-import myMoney from '@/pages/myMoney'
-import comment from '@/pages/comment'
-import makeOrder from '@/pages/makeOrder'
-import commission from '@/pages/commission'
-import pwdManager from '@/pages/pwdManager'
+const my = () => import('@/pages/my');
+const shareQR = () => import('@/pages/shareQR');
+const myOrder = () => import('@/pages/myOrder');
+const myOrder1 = () => import('@/pages/myOrder1');
+const collect = () => import('@/pages/collect');
+const messages = () => import('@/pages/messages');
+const msgInfo = () => import('@/pages/msgInfo');
+const mySub = () => import('@/pages/mySub');
+const myInfo = () => import('@/pages/myInfo');
+const myLeader = () => import('@/pages/myLeader');
+const historyCommission = () => import('@/pages/historyCommission');
+const address = () => import('@/pages/address');
+const addAddress = () => import('@/pages/addAddress');
+const contact = () => import('@/pages/contact');
+const myPoint = () => import('@/pages/myPoint');
+const myMoney = () => import('@/pages/myMoney');
+const comment = () => import('@/pages/comment');
+const makeOrder = () => import('@/pages/makeOrder');
+const commission = () => import('@/pages/commission');
+const pwdManager = () => import('@/pages/pwdManager');
 
 Vue.use(Router)
 

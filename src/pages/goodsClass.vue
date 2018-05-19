@@ -23,14 +23,19 @@ export default {
     }
   },
 
-  created() {
-    let url = `${config.host}index.php?m=Mobile&c=Index&a=GoodsCats`;
-    this.$dialog.loading.open('数据加载中');
-    this.$http.get(url).then(res=>{
-      this.data=res.body;
-      this.$dialog.loading.close();
-      // console.log(res.body);
-    });
+  mounted() {
+    if(!window.mallGoodsClass){
+      let url = `${config.host}index.php?m=Mobile&c=Index&a=GoodsCats`;
+      this.$dialog.loading.open('数据加载中');
+      this.$http.get(url).then(res=>{
+        this.data=res.body;
+        window.mallGoodsClass = res.body;
+        this.$dialog.loading.close();
+      });
+    }else{
+      this.data=window.mallGoodsClass;
+    }
+
   }
 }
 </script>
