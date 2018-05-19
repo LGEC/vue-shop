@@ -296,7 +296,7 @@ export default {
         let data = res.body;
 
         this.orderData.defaultAddress = data.defaultAddress; //默认地址
-        this.orderData.addressId = data.defaultAddress.addressId; //默认地址ID
+        this.orderData.addressId = data.defaultAddress ? data.defaultAddress.addressId : ''; //默认地址ID
         this.orderData.orderIds = data.orderIds; //订单ID
         this.orderData.totalMoney = data.totalMoney; //商品价格
         this.orderData.deliverMoney = data.deliverMoney; //邮费
