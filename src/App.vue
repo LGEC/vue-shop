@@ -1,7 +1,11 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+<div id="app">
+  <!-- <router-view/> -->
+  <keep-alive>
+    <router-view v-if="$route.meta.keepAlive"></router-view>
+  </keep-alive>
+  <router-view v-if="!$route.meta.keepAlive"></router-view>
+</div>
 </template>
 
 <script>
@@ -11,7 +15,7 @@ document.title = '分领商城';
 import vue from "vue";
 // 注册首页TOP
 import navIndex from "@/components/navIndex";
-vue.component("navIndex",navIndex);
+vue.component("navIndex", navIndex);
 //注册通用TOP
 import navThree from "@/components/navThree";
 vue.component("navThree", navThree);
@@ -41,9 +45,12 @@ vue.component("mgoodslist", mgoodslist);
 
 //引用swiper组件
 import 'swiper/dist/css/swiper.css';
-import { swiper, swiperSlide } from 'vue-awesome-swiper';
-vue.component('swiper',swiper);
-vue.component('swiper-slide',swiperSlide);
+import {
+  swiper,
+  swiperSlide
+} from 'vue-awesome-swiper';
+vue.component('swiper', swiper);
+vue.component('swiper-slide', swiperSlide);
 
 
 
@@ -67,18 +74,22 @@ export default {
   max-width: 750px;
   margin: 0 auto;
 }
-.hasnav{
+
+.hasnav {
   padding-bottom: 1rem;
 }
-.autoimg{
+
+.autoimg {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
-.yd-navbar:after{
+
+.yd-navbar:after {
   border-bottom: 0 !important;
 }
-.goods-info img{
+
+.goods-info img {
   width: 100%;
   display: block;
 }
