@@ -27,7 +27,7 @@
       </div>
       <div class="goods-desc"> {{data.goodsSpec}}
       </div>
-      <div class="goods-price">会员价：{{data.marketPrice}}两</div>
+      <div class="goods-price" v-if="data.userType == 2">会员价：{{data.marketPrice}}两</div>
       <div class="goods-price"> 零售价：{{data.shopPrice}} 元 <span class="goods-sales">评分: {{data.goodsScore}} &nbsp; 已售: {{data.saleCount}}</span> <span class="postage">快递：{{data.deliveryMoney}} 两</span>
       </div>
       <p class="add" v-if="data.FreeMoney">本商品满{{data.FreeMoney}}元即享包邮</p>

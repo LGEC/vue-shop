@@ -56,7 +56,7 @@ export default {
   beforeCreate() {
     this.$http.get(`${config.host}index.php?m=Mobile&c=Users&a=getUserId`).then(res => {
       window.localStorage.setItem('userId', res.body);
-      // window.localStorage.setItem('userId', 136);
+      // window.localStorage.setItem('userId', 157);
       this.userId = window.localStorage.getItem('userId');
     });
   },
