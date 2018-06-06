@@ -27,11 +27,11 @@
 </template>
 <script>
 import config from '@/config.js';
-let tempDatas;
-const deepClone=(obj)=>{
-  var proto=Object.getPrototypeOf(obj);
-  return Object.assign({},Object.create(proto),obj);
-}
+// let tempDatas;
+// const deepClone=(obj)=>{
+//   var proto=Object.getPrototypeOf(obj);
+//   return Object.assign({},Object.create(proto),obj);
+// }
 export default {
   data() {
     return {
@@ -55,22 +55,22 @@ export default {
     }
   },
   created() {
-    tempDatas = deepClone(this.specialData);
-    this.specialData = {};
-    console.log(tempDatas);
+    // tempDatas = deepClone(this.specialData);
+    // this.specialData = {};
+    // console.log(tempDatas);
   },
   mounted(){
-    if(tempDatas.goodsChilds.length >3){
-      let tempData = deepClone(tempDatas);
-      tempData.goodsChilds = tempData.goodsChilds.slice(0,3);
-      this.specialData = tempData;
-      console.log(this.specialData);
-      setTimeout(()=>{
-        this.specialData = tempDatas;
-      },2000)
-    }else{
-      this.specialData = tempDatas;
-    }
+    // // if(tempDatas.goodsChilds.length >3){
+    //   let tempData = deepClone(tempDatas);
+    //   tempData.goodsChilds = tempData.goodsChilds.slice(0,3);
+    //   this.specialData = tempData;
+    //   console.log(this.specialData);
+    //   setTimeout(()=>{
+    //     this.specialData = tempDatas;
+    //   },2000)
+    // }else{
+    //   this.specialData = tempDatas;
+    // }
   }
 }
 </script>

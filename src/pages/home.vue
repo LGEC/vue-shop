@@ -66,25 +66,17 @@ export default {
     let url = `${config.host}index.php?m=Mobile&c=Index&a=BannerPic`;
     this.$dialog.loading.open('数据加载中');
     console.log('::::::::::::::::::::::startrequest');
-    let startTime = new Date().getTime();
-    if(!window.indexBanners){
       this.$http.get(url).then((res) => {
-        window.indexBanners = res.body;
-        this.banners.push(...res.body);
+        let banners = res.body || [];
+        this.banners.push(...banners);
         this.$dialog.loading.close();
       });
-    }else{
-      this.banners.push(...window.indexBanners);
-      this.$dialog.loading.close();
-    }
-    if(!window.specialDatas){
       this.$http.get(specialUrl).then(res => {
+        console.log(res);
         let temp = res.body || [];
         this.specials.push(...temp);
+        console.log(this.specials);
       });
-    }else{
-      this.specials.push(...window.specialDatas);
-    }
     this.url = `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`;
   },
   components:{
