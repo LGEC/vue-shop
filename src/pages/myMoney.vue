@@ -83,16 +83,27 @@ export default {
   },
   created() {
     let url = `${config.host}index.php?m=Mobile&c=Users&a=distributMoneys&userId=${userId}`;
-    console.log(1024);
+  // console.log(1024);
     this.$http.get(url).then(res => {
       this.lists = res.body;
-      console.log('-------------------');
-      console.log(res);
+    // console.log('-------------------');
+    // console.log(res);
+    });
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
     });
   },
   methods: {
     handleConfirmRecharge() {
-      console.log(this.howMoney);
+    // console.log(this.howMoney);
       if (!this.howMoney) {
         this.$dialog.toast({
           mes: '请输入充值金额',
@@ -116,7 +127,7 @@ export default {
     },
     handleRecharge() {
       this.showPop = true;
-      console.log('6666666666666666666666');
+    // console.log('6666666666666666666666');
     },
     handleBack() {
       this.$router.go(-1);

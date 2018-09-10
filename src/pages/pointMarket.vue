@@ -25,6 +25,18 @@ export default {
       url: `${config.host}index.php?m=Mobile&c=Convert&a=getConvertGoodsList&p=`
     }
   },
+  created() {
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
+  },
   methods: {
     handleBack() {
       this.$router.go(-1);

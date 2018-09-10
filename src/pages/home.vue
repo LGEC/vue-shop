@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import main from '@/main.js';
 import config from '@/config.js';
 //注册专题组件
 import special from "@/components/special";
@@ -59,27 +60,43 @@ export default {
       // window.localStorage.setItem('userId', 157);
       this.userId = window.localStorage.getItem('userId');
     });
+    
+    
+  },
+  created(){
+  	//微信分享
+    let thisUrl = window.location.href;
+  // console.log(thisUrl)
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   mounted() {
     let self = this;
     let specialUrl = `${config.host}index.php?m=Mobile&c=Index&a=Ads&rows=20`;
     let url = `${config.host}index.php?m=Mobile&c=Index&a=BannerPic`;
     this.$dialog.loading.open('数据加载中');
-    console.log('::::::::::::::::::::::startrequest');
+    //console.log('::::::::::::::::::::::startrequest');
       this.$http.get(url).then((res) => {
         let banners = res.body || [];
         this.banners.push(...banners);
         this.$dialog.loading.close();
       });
       this.$http.get(specialUrl).then(res => {
-        console.log(res);
+        // console.log(res);
         let temp = res.body || [];
         this.specials.push(...temp);
-        console.log(this.specials);
+        // console.log(this.specials);
       });
     this.url = `${config.host}index.php?m=Mobile&c=Index&a=goodsHot&p=`;
   },
-  components:{
+  
+  components:{ 
     special
   }
 }

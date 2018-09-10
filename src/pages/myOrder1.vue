@@ -226,14 +226,14 @@ export default {
 
   created() {
     this.userId = window.localStorage.getItem('userId');
-    console.log(window.localStorage.getItem('userId'));
+  // console.log(window.localStorage.getItem('userId'));
     // http://00.37518.com/index.php?m=Mobile&c=Orders&a=queryConvertDeliveryByPage&userId=136
     let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryConvertDeliveryByPage1&userId=${window.localStorage.getItem('userId')}`;
-    console.log(url);
+  // console.log(url);
     this.$http.get(url).then((res) => {
-      console.log('++++++++');
-      console.log(res);
-      console.log('++++++++');
+    // console.log('++++++++');
+    // console.log(res);
+    // console.log('++++++++');
       let data = res.body;
       for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[i].goodslist.length; j++) {
@@ -242,6 +242,17 @@ export default {
       }
       this.data1 = data;
     })
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   methods: {
     handleBack() {
@@ -263,9 +274,9 @@ export default {
 
     confirmRefund(){
 
-      console.log('-------------------++++++++++++++++++++++++++++++++');
-      console.log(123);
-      console.log(this.testval);
+    // console.log('-------------------++++++++++++++++++++++++++++++++');
+    // console.log(123);
+    // console.log(this.testval);
       if(!this.mouchNo){
         this.$dialog.toast({
           mes: '单号不能为空！',
@@ -280,7 +291,7 @@ export default {
         let url = `${config.host}index.php?m=Mobile&c=orders&a=refund&orderId=${tempOrderId}&mouchNum=${this.mouchNo}&mouchType=${this.testval}`;
         this.$dialog.loading.open('提交中');
         this.$http.get(url).then((res) => {
-          console.log(res);
+        // console.log(res);
           this.$dialog.loading.close();
           if (res.body.status == 1) {
             this.$dialog.toast({
@@ -313,7 +324,7 @@ export default {
             let url = `${config.host}index.php?m=Mobile&c=orders&a=refund&orderId=${orderId}`;
             this.$dialog.loading.open('提交中');
             this.$http.get(url).then((res) => {
-              console.log(res);
+            // console.log(res);
               this.$dialog.loading.close();
               if (res.body.status == 1) {
                 if (flag === 'cancel') {
@@ -351,9 +362,9 @@ export default {
 
     //查看物流
     showWuLiu(e) {
-      console.log(this.data2);
+    // console.log(this.data2);
       let index = e.target.id;
-      console.log(index);
+    // console.log(index);
       let url = `https://www.kuaidi100.com/chaxun?com=${this.data2[index].deliverType}&nu=${this.data2[index].orderNum}`;
       window.location.href = url;
     },
@@ -379,7 +390,7 @@ export default {
     },
     // 选项卡切换时执行的回调，加载切换页得数据
     loadingNow(label, tabkey) {
-      console.log(tabkey);
+    // console.log(tabkey);
       // console.log(label, tabkey);
       if(tabkey == 0){
         this.data1 = [];
@@ -395,11 +406,11 @@ export default {
         });
       }
       if (tabkey == 1) {
-        console.log('tab+++++++++++++++++++');
+      // console.log('tab+++++++++++++++++++');
         this.data2 = [];
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryConvertDeliveryByPage2&userId=${userId}`;
         this.$http.get(url).then((res) => {
-          console.log(res.body);
+        // console.log(res.body);
           let data = res.body.list;
           this.brands = res.body.brands;
           for (let i = 0; i < data.length; i++) {
@@ -413,8 +424,8 @@ export default {
       // if (tabkey == 3) {
       //   let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryCompleteOrders&userId=${userId}&p=${this.page}`;
       //   this.$http.get(url).then((res) => {
-      //     console.log(res.body);
-      //     console.log(userId);
+      //   // console.log(res.body);
+      //   // console.log(userId);
       //     let data = res.body;
       //     for (let i = 0; i < data.length; i++) {
       //       for (let j = 0; j < data[i].goodslist.length; j++) {

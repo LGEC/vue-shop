@@ -159,6 +159,8 @@ export default {
   },
   beforeCreate() {
     userId = window.localStorage.getItem('userId');
+    localStorage.removeItem("mjType");
+    localStorage.removeItem("mjOrderData");
   },
   created() {
     let self = this,
@@ -167,7 +169,7 @@ export default {
     let url = `${config.host}index.php?m=Mobile&c=Goods&a=getGoodsDetails&goodsId=${goodsId}&userId=${userId}&p=`;
     this.$http.get(url).then((res) => {
       let data = res.body;
-      console.log(data);
+    console.log(data);
       self.data = data;
       for (let i = 0; i < data.goodsAlbum.length; i++) {
         data.goodsAlbum[i].goodsImg = config.host + data.goodsAlbum[i].goodsImg;
@@ -186,13 +188,33 @@ export default {
           break;
         }
       };
-      console.log('1111111111111111');
-      console.log(self.radio);
+      //console.log(self.radio);
       self.data = data;
       self.url = `${config.host}index.php?m=Mobile&c=Shops&a=getShopGoodsList&shopId=${data.shopId}&p=`;
-      // console.log(data);
+    // console.log(data.goodsName);
+      //微信分享
+	    let thisUrl = window.location.href;
+	    wechatShare({
+	    	url:thisUrl,
+	    	title: data.goodsName,
+	    	desc:data.goodsSpec,
+	     	content: data.goodsName,
+	     	link: thisUrl,
+	     	logo: firstImg,
+	    });
     }, (error) => {
       // console.log(error);
+      //微信分享
+	    let thisUrl = window.location.href;
+	    //console.log(thisUrl)
+	    wechatShare({
+	    	url:thisUrl,
+	    	title: '分领商城',
+	    	desc:'分享财富，引领未来',
+	     	content: '分享财富，引领未来',
+	     	link: '',
+	     	logo: '',
+	    });
     });
   },
   watch: {
@@ -210,7 +232,7 @@ export default {
       // console.log(now);
     },
     spinner: function(now) {
-      console.log(now);
+    // console.log(now);
       // this.data = now.replace(/[^/d]/g,'');
       // if(now>this.attrStock*1) this.spinner = this.attrStock;
       // if(now <= 0) this.spinner = 1;
@@ -243,7 +265,7 @@ export default {
         });
       } else {
         this.$http.get(url).then((res) => {
-          console.log(res);
+        // console.log(res);
           if (res.body.status == 1) {
             this.$dialog.toast({
               mes: '收藏成功!',
@@ -290,7 +312,7 @@ export default {
             this.show = false;
           }
         }, (err) => {
-          console.log(err);
+        // console.log(err);
         })
       }
 
@@ -302,6 +324,7 @@ export default {
           timeout: 1500
         });
       } else {
+				localStorage.removeItem("defaultAddress");
         let goodsId = parseInt(this.data.goodsId),
           goodsCnt = this.spinner,
           goodsAttrId = parseInt(this.data.goodsAttrs[this.radio].id);
@@ -323,14 +346,14 @@ export default {
 
         });
 
-        console.log(this.orderData);
+      // console.log(this.orderData);
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=checkOrderInfo`;
         this.$http.post(url, this.orderData, {
           emulateJSON: true
         }).then((res) => {
           // console.log(res);
           let data = res.body;
-          console.log(data);
+        // console.log(data);
 
           this.orderData.defaultAddress = data.defaultAddress; //默认地址
           this.orderData.addressId = data.defaultAddress ? data.defaultAddress.addressId : 0; //默认地址ID

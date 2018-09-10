@@ -63,6 +63,9 @@
           <yd-cell-item arrow type="link" href="/mySub">
             <span slot="left">我的会员</span>
           </yd-cell-item>
+          <yd-cell-item arrow type="link" href="/supplierApply">
+            <span slot="left">成为供货商</span>
+          </yd-cell-item>
           <!-- <yd-cell-item arrow type="link" href="/myInfo">
             <span slot="left">绑定手机号</span>
         </yd-cell-item> -->
@@ -107,17 +110,28 @@ export default {
       isLabel:0
     }
   },
-  beforeCreate() {
+  created() {
     userId = window.localStorage.getItem('userId');
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   mounted: function() {
     let url = `${config.host}index.php?m=Mobile&c=Users&a=getUserById&userId=${userId}`
     if(!window.myDatas){
       this.$dialog.loading.open('数据加载中');
       // `this` 指向 vm 实例
-      console.log(this.GLOBAL);
+      //console.log(this.GLOBAL);
       this.$http.get(url).then((res) => {
-        console.log(res);
+      // console.log(res);
         let data = res.body;
         window.myDatas = data;
         data.userPhoto = data.userPhoto;
@@ -151,7 +165,7 @@ export default {
   methods: {
     handleGoToMyMoney() {
       this.$router.push('/myMoney')
-      console.log('goto')
+    // console.log('goto')
     }
   }
 }

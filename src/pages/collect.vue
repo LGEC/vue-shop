@@ -72,6 +72,18 @@ export default {
       };
       this.data = data;
     })
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+  // console.log(thisUrl)
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   methods: {
     handleBack() {
@@ -102,11 +114,11 @@ export default {
           timeout: 1500
         });
       } else {
-        console.log(data);
+      // console.log(data);
         this.$http.post(url, data, {
           emulateJSON: true
         }).then((res) => {
-          console.log(res.body);
+        // console.log(res.body);
           if (res.body.status == 1) {
             this.$dialog.toast({
               mes: '删除成功！',

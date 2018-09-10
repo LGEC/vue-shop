@@ -30,6 +30,8 @@ export default {
     userId = window.localStorage.getItem('userId');
   },
   created: function() {
+       console.log(new Date());
+       console.log(userId);
     let url = `${config.host}index.php?m=Mobile&c=Index&a=loadConfigs&userId=${userId}`;
     if (!userId) {
       url = `${config.host}index.php?m=Mobile&c=Index&a=loadConfigs&userId=${window.localStorage.getItem('userId')}`;
@@ -38,24 +40,19 @@ export default {
     let self = this;
     this.$http.get(url).then(res => {
       let data = res.body;
-      console.log(data);
-      // console.log(data);
-      // console.log(data['hotSearchs']);
+       // console.log(new Date());
       self.headPic = data['goodsImg'];
       self.keyWords = data['hotSearchs'][0];
     });
-    if (!window.localStorage.getItem('userId')) {
+    if (!parseInt(window.localStorage.getItem('userId'))) {
       setTimeout(() => {
         url = `${config.host}index.php?m=Mobile&c=Index&a=loadConfigs&userId=${window.localStorage.getItem('userId')}`;
         this.$http.get(url).then(res => {
           let data = res.body;
-          console.log(data);
-          // console.log(data);
-          // console.log(data['hotSearchs']);
           self.headPic = data['goodsImg'];
           self.keyWords = data['hotSearchs'][0];
         });
-      }, 4200);
+      }, 2000);
     }
   }
 }

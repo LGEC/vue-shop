@@ -104,6 +104,17 @@ export default {
       // console.log(res.body);
       this.data = data;
     })
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   methods: {
     delCart() {
@@ -138,7 +149,7 @@ export default {
       this.$http.post(url, data, {
         emulateJSON: true
       }).then((res) => {
-        console.log(res.body);
+      // console.log(res.body);
         if (res.body.status == 1) {
           this.$dialog.toast({
             mes: '删除成功!',
@@ -192,7 +203,7 @@ export default {
         this.$http.post(url, this.orderData, {
           emulateJSON: true
         }).then((res) => {
-          console.log(res);
+        // console.log(res);
           let data = res.body;
           this.orderData.defaultAddress = data.defaultAddress; //默认地址
           this.orderData.addressId = data.defaultAddress.addressId; //默认地址ID

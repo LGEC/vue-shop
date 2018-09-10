@@ -8,6 +8,12 @@ import VueResource from 'vue-resource'
 import YDUI from 'vue-ydui'
 import 'vue-ydui/dist/ydui.rem.css'
 import lazyload from 'vue-lazyload'
+//分享
+import { wechatShare } from './share.js'; 
+import wx from 'weixin-js-sdk';
+//Vue.prototype.wechatShare  = wechatShare
+window.wechatShare  = wechatShare; 
+//分享
 
 Vue.use(YDUI);
 Vue.use(VueResource);
@@ -16,13 +22,13 @@ Vue.use(lazyload);
 // Vue.use(Vuex);
 let test = new Vue({
   created() {
-    console.log('-------------------');
+    // console.log('-------------------');
     Vue.prototype.GLOBAL = 'hello vue prototype';
     this.$dialog.loading.open('正在登陆中');
     this.$http.get(`http://00.37518.com/index.php?m=Mobile&c=Users&a=getUserId`).then(res => {
-      console.log('------------');
-      console.log(res.body);
-      console.log('------------');
+      // console.log('------------');
+      // console.log(res.body);
+      // console.log('------------');
       window.localStorage.setItem('userId', res.body);
       // window.localStorage.setItem('userId', 157);
       this.$dialog.loading.close();

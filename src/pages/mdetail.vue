@@ -134,20 +134,20 @@ export default {
     let self = this,
       goodsId = this.$route.params.goodsId;
     userId = window.localStorage.getItem('userId');
-    console.log(userId);
-    console.log('----------------------------------------------------------------+++++++++++++++++++++++++++++');
+  // console.log(userId);
+  // console.log('----------------------------------------------------------------+++++++++++++++++++++++++++++');
     let test = `${config.host}index.php?m=Mobile&c=convert&a=getConvertGoodsDetails&goodsId=${goodsId}&userId=136`;
 
     // http://00.37518.com/index.php?m=Mobile&c=convert&a=getConvertGoodsDetails&goodsId=@value&p=@value
 
     let url = `${config.host}index.php?m=Mobile&c=convert&a=getConvertGoodsDetails&goodsId=${goodsId}&userId=${userId}`;
-    console.log('--------------------------');
-    console.log(url);
-    console.log('--------------------------');
+  // console.log('--------------------------');
+  // console.log(url);
+  // console.log('--------------------------');
     this.$http.get(url).then((res) => {
-      console.log('--------------------------');
-      console.log(res);
-      console.log('--------------------------');
+    // console.log('--------------------------');
+    // console.log(res);
+    // console.log('--------------------------');
       let data = res.body;
       for (let i = 0; i < data.goodsAlbum.length; i++) {
         data.goodsAlbum[i].goodsImg = config.host + data.goodsAlbum[i].goodsImg;
@@ -168,17 +168,29 @@ export default {
       this.data = data;
       this.url = `${config.host}index.php?m=Mobile&c=Shops&a=getShopGoodsList&shopId=${data.shopId}&p=`;
       // this.$http.get(test).then((res) => {
-      //   console.log('--------------------------');
-      //   console.log(res);
-      //   console.log('--------------------------');
+      // // console.log('--------------------------');
+      // // console.log(res);
+      // // console.log('--------------------------');
       // }, err => {
-      //   console.log('--------------------------');
-      //   console.log(err);
-      //   console.log('--------------------------');
+      // // console.log('--------------------------');
+      // // console.log(err);
+      // // console.log('--------------------------');
       // });
       // console.log(data);
     }, (error) => {
       // console.log(error);
+    });
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+  // console.log(thisUrl)
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
     });
   },
   watch: {
@@ -191,7 +203,7 @@ export default {
       this.totalPrice = this.totalPrice.toFixed(2);
     },
     spinner: function(now) {
-      console.log(now);
+    // console.log(now);
       // this.spinner = now.replace(/^[0-9]/g,'');
       // if(now>this.attrStock*1) this.spinner = this.attrStock;
       // if(now <= 0) this.spinner = 1;
@@ -218,7 +230,7 @@ export default {
         });
       } else {
         this.$http.get(url).then((res) => {
-          console.log(res);
+        // console.log(res);
           if (res.body.status == 1) {
             this.$dialog.toast({
               mes: '收藏成功!',
@@ -258,7 +270,7 @@ export default {
           this.show = false;
         }
       }, (err) => {
-        console.log(err);
+      // console.log(err);
       })
     },
     buyNow() {
@@ -269,7 +281,7 @@ export default {
       // console.log(userId, goodsId, goodsCnt, goodsAttrId);
 
       //把数据放进orderData中
-      console.log(userId);
+    // console.log(userId);
       this.orderData.userId = userId;
       this.orderData.goodsData = [];
       this.orderData.goodsData.push({
@@ -285,14 +297,14 @@ export default {
 
       });
 
-      console.log(this.orderData);
+    // console.log(this.orderData);
 
-      console.log(this.orderData);
+    // console.log(this.orderData);
       let url = `${config.host}index.php?m=Mobile&c=Orders&a=checkOrderInfo&type=3`;
       this.$http.post(url, this.orderData, {
         emulateJSON: true
       }).then((res) => {
-        console.log(res);
+      // console.log(res);
         let data = res.body;
 
         this.orderData.defaultAddress = data.defaultAddress; //默认地址

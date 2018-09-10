@@ -22,6 +22,7 @@ const collect = () => import('@/pages/collect');
 const messages = () => import('@/pages/messages');
 const msgInfo = () => import('@/pages/msgInfo');
 const mySub = () => import('@/pages/mySub');
+const supplierApply = () => import('@/pages/supplierApply');
 const myInfo = () => import('@/pages/myInfo');
 const myLeader = () => import('@/pages/myLeader');
 const historyCommission = () => import('@/pages/historyCommission');
@@ -163,6 +164,14 @@ export default new Router({
       path: '/mySub',
       name: 'mySub',
       component: mySub,
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/supplierApply',
+      name: 'supplierApply',
+      component: supplierApply,
       meta: {
         keepAlive: false
       }

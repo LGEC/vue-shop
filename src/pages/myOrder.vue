@@ -169,14 +169,14 @@ export default {
   created() {
     this.getNums();
     this.userId = window.localStorage.getItem('userId');
-    console.log(window.localStorage.getItem('userId'));
+  // console.log(window.localStorage.getItem('userId'));
     let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryDeliveryByPage&userId=${window.localStorage.getItem('userId')}`;
-    console.log(url);
+  // console.log(url);
     this.$dialog.loading.open('数据加载中');
     this.$http.get(url).then((res) => {
-      console.log('++++++++');
-      console.log(res);
-      console.log('++++++++');
+    // console.log('++++++++');
+    // console.log(res);
+    // console.log('++++++++');
       let data = res.body;
       for (let i = 0; i < data.length; i++) {
         for (let j = 0; j < data[i].goodslist.length; j++) {
@@ -186,12 +186,23 @@ export default {
       this.data1 = data;
       this.$dialog.loading.close();
     })
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   methods: {
     getNums() {
       let url = `${config.host}index.php?m=Mobile&c=Orders&a=orderNum&userId=${window.localStorage.getItem('userId')}`;
       this.$http.get(url).then(res => {
-        console.log(res);
+      // console.log(res);
         this.nums = res.body;
       })
     },
@@ -207,9 +218,9 @@ export default {
     },
     confirmRefund(){
 
-      console.log('-------------------++++++++++++++++++++++++++++++++');
-      console.log(123);
-      console.log(this.testval);
+    // console.log('-------------------++++++++++++++++++++++++++++++++');
+    // console.log(123);
+    // console.log(this.testval);
       if(!this.mouchNo){
         this.$dialog.toast({
           mes: '单号不能为空！',
@@ -222,10 +233,10 @@ export default {
         });
       }else{
         let url = `${config.host}index.php?m=Mobile&c=orders&a=refund&orderId=${tempOrderId}&mouchNum=${this.mouchNo}&mouchType=${this.testval}`;
-        console.log(url);
+      // console.log(url);
         this.$dialog.loading.open('提交中');
         this.$http.get(url).then((res) => {
-          console.log(res);
+        // console.log(res);
           this.$dialog.loading.close();
           if (res.body.status == 1) {
             this.$dialog.toast({
@@ -256,7 +267,7 @@ export default {
             let url = `${config.host}index.php?m=Mobile&c=orders&a=refund&orderId=${orderId}`;
             this.$dialog.loading.open('提交中');
             this.$http.get(url).then((res) => {
-              console.log(res);
+            // console.log(res);
               this.$dialog.loading.close();
               if (res.body.status == 1) {
                 if (flag === 'cancel') {
@@ -316,18 +327,18 @@ export default {
     },
     // 选项卡切换时执行的回调，加载切换页得数据
     loadingNow(label, tabkey) {
-      console.log('---------------------------');
-      console.log(tabkey, label);
+    // console.log('---------------------------');
+    // console.log(tabkey, label);
       if(tabkey == 0){
         this.data1 = [];
         this.$dialog.loading.open('数据加载中');
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryDeliveryByPage&userId=${window.localStorage.getItem('userId')}`;
-        console.log(url);
+      // console.log(url);
         this.$dialog.loading.open('数据加载中');
         this.$http.get(url).then((res) => {
-          console.log('++++++++');
-          console.log(res);
-          console.log('++++++++');
+        // console.log('++++++++');
+        // console.log(res);
+        // console.log('++++++++');
           let data = res.body;
           for (let i = 0; i < data.length; i++) {
             for (let j = 0; j < data[i].goodslist.length; j++) {
@@ -342,10 +353,10 @@ export default {
       if (tabkey == 1) {
         this.data2 = [];
         if (this.data2.length == 0) this.$dialog.loading.open('数据加载中');
-        console.log('----------------------------------2');
+      // console.log('----------------------------------2');
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryReceiveByPage&userId=${userId}`;
         this.$http.get(url).then((res) => {
-          console.log(res.body);
+        // console.log(res.body);
           let data = res.body.list;
           this.brands = res.body.brands;
           for (let i = 0; i < data.length; i++) {
@@ -359,15 +370,15 @@ export default {
       };
       if (tabkey == 2) {
         this.data3 = [];
-        console.log('---------------------------------');
+      // console.log('---------------------------------');
         if (this.data3.length == 0) this.$dialog.loading.open('数据加载中');
         let url = `${config.host}index.php?m=Mobile&c=Orders&a=queryCompleteOrders&userId=${userId}&p=${this.page}`;
         this.$http.get(url).then((res) => {
-          console.log('success');
-          console.log(res.body);
-          console.log(userId);
+        // console.log('success');
+        // console.log(res.body);
+        // console.log(userId);
           let data = res.body;
-          console.log(data);
+        // console.log(data);
           for (let i = 0; i < data.length; i++) {
             for (let j = 0; j < data[i].goodslist.length; j++) {
               data[i].goodslist[j].goodsThums = config.host + data[i].goodslist[j].goodsThums;
@@ -380,13 +391,13 @@ export default {
     },
     showWuLiu(e) {
       let index = e.target.id;
-      console.log(index);
+    // console.log(index);
       let url = `https://www.kuaidi100.com/chaxun?com=${this.data2[index].deliverType}&nu=${this.data2[index].orderNum}`;
       window.location.href = url;
     },
     showWuLiu1(e) {
       let index = e.target.id;
-      console.log(index);
+    // console.log(index);
       let url = `https://www.kuaidi100.com/chaxun?com=${this.data3[index].deliverType}&nu=${this.data3[index].orderNum}`;
       window.location.href = url;
     },

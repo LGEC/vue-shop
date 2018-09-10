@@ -75,14 +75,25 @@ export default {
     let url = `${config.host}index.php?m=Mobile&c=CashDraws&a=goodsShareTitle`;
     this.$http.get(url).then(res => {
       this.service = res.body;
-      console.log(res);
+    // console.log(res);
     });
 
 
     this.isPay = this.$route.params.isPay == false || this.$route.params.isPay == 'false' ? false : true;
-    console.log(this.isPay);
-    console.log(this.$route.params);
-    console.log(typeof this.$route.params.isPay);
+  // console.log(this.isPay);
+  // console.log(this.$route.params);
+  // console.log(typeof this.$route.params.isPay);
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
 
 
   },
@@ -110,7 +121,7 @@ export default {
         } else {
           let url = `${config.host}index.php?m=Mobile&c=Users&a=setPayPwd&userId=${userId}&newPwd=${this.npwd2}&oldPwd=${this.npwd1}`;
           this.$http.get(url).then(res => {
-            console.log(res);
+          // console.log(res);
             if (res.body.status == 1) {
               this.$dialog.toast({
                 mes: '设置成功',
@@ -139,7 +150,7 @@ export default {
         } else {
           let url = `${config.host}index.php?m=Mobile&c=Users&a=setPayPwd&userId=${userId}&newPwd=${this.spwd1}`;
           this.$http.get(url).then(res => {
-            console.log(res);
+          // console.log(res);
             if (res.body.status == 1) {
               this.$dialog.toast({
                 mes: '设置成功',

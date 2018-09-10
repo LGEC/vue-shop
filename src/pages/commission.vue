@@ -75,7 +75,19 @@ export default {
     let url = `${config.host}index.php?m=Mobile&c=CashDraws&a=goodsShareTitle`;
     this.$http.get(url).then(res => {
       this.service = res.body;
-      console.log(res);
+    // console.log(res);
+    });
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+  // console.log(thisUrl)
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
     });
 
   },
@@ -113,7 +125,7 @@ export default {
       } else {
         let url = `${config.host}index.php?m=Mobile&c=CashDraws&a=drawsCashByUser&userId=${userId}&payPwd=${this.pwd}&drawMoney=${this.money}&accNo=${this.cardNum}&accUser=${this.userName}&openHang=${this.openHang}`;
         this.$http.get(url).then(res => {
-          console.log(res);
+        // console.log(res);
           if (res.body.status == 1) {
             this.$dialog.toast({
               mes: '提现成功',

@@ -54,6 +54,8 @@ export default {
       data:{}
     }
   },
+  beforeCreate() {
+  },
   created(){
     let shopId = this.$route.params.shopId;
     this.url = `${config.host}index.php?m=Mobile&c=Shops&a=getShopGoodsList&shopId=${shopId}&p=`;
@@ -64,10 +66,34 @@ export default {
       this.data = data;
       this.qq = 'tencent://message/?uin='+data.qqNo+'&Site=400301.com&Menu=yes';
       this.tel = 'tel:'+data.shopTel;
-      // console.log(this.data);
+      console.log(data);
+      
+      //微信分享
+	    let thisUrl = window.location.href;
+	    wechatShare({
+	    	url:thisUrl,
+	    	title: data.shopName,
+	    	desc:'分享财富，引领未来',
+	     	content: '分享财富，引领未来',
+	     	link: thisUrl,
+	     	logo: '',
+	    });
     },(error)=>{
       //错误回调
+      //微信分享
+	    let thisUrl = window.location.href;
+	    wechatShare({
+	    	url:thisUrl,
+	    	title: '分领商城',
+	    	desc:'分享财富，引领未来',
+	     	content: '分享财富，引领未来',
+	     	link: '',
+	     	logo: '',
+	    });
     })
+    
+    
+  	
   },
   methods: {
     handleBack() {

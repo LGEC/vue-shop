@@ -49,9 +49,20 @@ export default {
   created () {
     let url = `${config.host}index.php?m=Mobile&c=Users&a=getSpreadUserList&userId=${userId}`;
         this.$http.get(url).then((res)=>{
-          console.log(res.body);
+        // console.log(res.body);
         this.data = res.body;
         })
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   methods: {
     handleBack() {

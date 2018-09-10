@@ -62,12 +62,12 @@ export default {
     userId = window.localStorage.getItem('userId');
   },
   created() {
-    console.log(userId);
+  // console.log(userId);
     this.$dialog.loading.open('数据加载中');
     let url = `${config.host}index.php?m=Mobile&c=CashDraws&a=queryByPage&userId=${userId}`;
     this.$http.get(url).then((res) => {
       let list = res.body || [];
-      console.log(list);
+    // console.log(list);
       for (let i = 0; i < list.length; i++) {
         if (list[i].cashSatus == 0) {
           list[i].btns = [{
@@ -95,7 +95,7 @@ export default {
                   });
                 }
               });
-              console.log(i, userId);
+            // console.log(i, userId);
             }
           }];
         } else {
@@ -104,6 +104,18 @@ export default {
       }
       this.list = list;
       this.$dialog.loading.close();
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+  // console.log(thisUrl)
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
     })
   },
   methods: {
@@ -112,7 +124,7 @@ export default {
     },
     clickHander() {
       let url = `${config.host}index.php?m=Mobile&c=CashDraws&a=queryByPage&userId=${userId}`;
-      console.log(userId);
+    // console.log(userId);
 
     }
   }

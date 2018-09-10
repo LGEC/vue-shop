@@ -3,6 +3,7 @@
 >  webpack + vue + ydui
 
 ``` bash
+npm install chromedriver --chromedriver_cdnurl=http://cdn.npm.taobao.org/dist/chromedriver  //常见错误 code ELIFECYCLE
 npm run dev
 # run at localhost:8080
 npm run mock
@@ -10,7 +11,7 @@ npm run mock
 anywhere -p 520
 # pic serves start
 ```
-
+## IP ./config/index.js
 
 ## Build Setup
 

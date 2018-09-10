@@ -2,7 +2,7 @@
 <div class="container hasNav">
 
   <div class="top">
-    <yd-navbar title="收货地址" bgcolor="#d94927" color="#fff">
+    <yd-navbar title="成为供货商" bgcolor="#d94927" color="#fff">
       <section slot="left" @click="handleBack">
         <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
       </section>
@@ -14,29 +14,34 @@
       <yd-cell-group>
 
         <yd-cell-item>
-          <span slot="left">姓名：</span>
-          <yd-input slot="right" v-model="input1" regex="" placeholder="请输入收货人姓名" ref="input1"></yd-input>
+          <span slot="left">公&ensp;司&ensp;名：</span>
+          <yd-input slot="right" v-model="input1" regex="" placeholder="请输入公司姓名" ref="input1"></yd-input>
         </yd-cell-item>
 
         <yd-cell-item>
-          <span slot="left">手机：</span>
-          <yd-input slot="right" v-model="input2" regex="" placeholder="请输入收货人手机号"></yd-input>
+          <span slot="left">申&ensp;请&ensp;人：</span>
+          <yd-input slot="right" v-model="input2" regex="" placeholder="请输入申请人姓名" ref="input1"></yd-input>
+        </yd-cell-item>
+
+        <yd-cell-item>
+          <span slot="left">手&ensp;&ensp;&ensp;机&ensp;：</span>
+          <yd-input slot="right" v-model="input3" regex="" placeholder="请输入申请人手机号"></yd-input>
+        </yd-cell-item>
+				
+        <yd-cell-item>
+          <span slot="left">QQ/微信：</span>
+          <yd-input slot="right" v-model="input4" regex="" placeholder="请输入申请人QQ/微信"></yd-input>
         </yd-cell-item>
 
         <yd-cell-item arrow>
-          <span slot="left">地区：</span>
+          <span slot="left">公司地址：</span>
           <input slot="right" type="text" @click.stop="show = true" v-model="defaultAddress" placeholder="请选择省、市、县/区">
         </yd-cell-item>
 
         <yd-cell-item>
           <yd-textarea slot="right" v-model="address" placeholder="请输入您的详细地址"></yd-textarea>
         </yd-cell-item>
-
-        <yd-cell-item>
-          <span slot="left">设为默认地址</span>
-          <yd-switch slot="right" color="#e8380d" v-model="switch1"></yd-switch>
-        </yd-cell-item>
-
+				
       </yd-cell-group>
 
 
@@ -47,7 +52,7 @@
   </div>
 
   <div class="saveBtn" @click="saveNewAddress">
-    保 存
+    提交申请
   </div>
 </div>
 </template>
@@ -62,6 +67,8 @@ export default {
       switch1: false,
       input1: '',
       input2: '',
+      input3: '',
+      input4: '',
       areaId1: '河南',
       areaId2: '郑州市',
       areaId3: '金水区',
@@ -82,8 +89,11 @@ export default {
       this.$http.get(url).then((res) => {
         // console.log(res.body);
         let data = res.body;
-          this.input1 = data.userName;
-          this.input2 = data.userPhone;
+				
+          this.input2 = data.userName;
+          this.input3 = data.userPhone;
+          this.input1 = data.companyName;
+          this.input4 = data.userQQ;
           this.areaId1 = data.areaId1;
           this.areaId2 = data.areaId2;
           this.areaId3 = data.areaId3;
@@ -120,8 +130,10 @@ export default {
         data = {
           id: 0,
           userId: userId,
-          userName: this.input1,
-          userPhone: this.input2,
+          userName: this.input2,
+          userPhone: this.input3,
+          companyName: this.input1,
+          userQQ: this.input4,
           areaId1: this.areaId1,
           areaId2: this.areaId2,
           areaId3: this.areaId3,
@@ -133,14 +145,24 @@ export default {
       };
       // console.log(data);
       // console.log(url);
-      if (!data.userName) {
+      if (!data.companyName) {
+        this.$dialog.toast({
+          mes: '公司名不能为空！',
+          timeout: 1500
+        });
+      } else if (!data.userName) {
         this.$dialog.toast({
           mes: '姓名不能为空！',
           timeout: 1500
         });
-      } else if (!(/^1[3|4|5|6|7|8|9][0-9]{9}$/.test(data.userPhone))) {
+      }else if (!(/^1[3|4|5|6|7|8|9][0-9]{9}$/.test(data.userPhone))) {
         this.$dialog.toast({
           mes: '请输入正确的手机号码！',
+          timeout: 1500
+        });
+      } else if (!data.userQQ) {
+        this.$dialog.toast({
+          mes: '微信/QQ不能为空！',
           timeout: 1500
         });
       } else if (!data.address) {
@@ -149,12 +171,13 @@ export default {
           timeout: 1500
         });
       } else {
-        this.$http.post(url, data, {
+				console.log(url)
+				console.log(data)
+        /* this.$http.post(url, data, {
           emulateJSON: true
         }).then(res => {
           // console.log(res.body);
           if (res.body.status == 1) {
-						localStorage.setItem("defaultAddress",JSON.stringify(data))
             this.$dialog.toast({
               mes: '操作成功！',
               timeout: 1500
@@ -166,7 +189,7 @@ export default {
               timeout: 1500
             });
           }
-        });
+        }); */
       }
     }
   }

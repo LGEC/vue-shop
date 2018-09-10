@@ -105,7 +105,10 @@
         <span slot="left">邮费</span>
         <span slot="right">{{orderData.deliverMoney}} {{mjtype?'两':'元'}}</span>
       </yd-cell-item>
-
+			<yd-cell-item>
+        <span slot="left">邮费货到付</span>
+        <yd-switch slot="right" color="#e8380d" v-model="switch1"></yd-switch>
+      </yd-cell-item>
     </yd-cell-group>
   </div>
 
@@ -171,41 +174,68 @@ export default {
   },
   created() {
     allowPaymat = true;
-    console.log(this.$route.query.mjtype);
-    console.log('-------------------------------------');
-    console.log(window.mjOrderData);
-    console.log('-------------------------------------');
-    if (window.mjOrderData) {
-      this.orderData = window.mjOrderData;
+  // console.log(this.$route.query.mjtype);
+  // console.log('-------------------------------------');
+  // console.log(window.mjOrderData);
+    var mjOrderDatas = localStorage.getItem("mjOrderData");
+    var mjTypes = localStorage.getItem("mjType");
+// 		console.log(mjOrderDatas)
+// 		console.log(mjTypes)
+    if (mjOrderDatas) {
+      this.orderData = JSON.parse(mjOrderDatas);
       this.adTotalMoney = this.orderData.realTotalMoney;
-      this.mjtype = window.mjType == 2 ? true : false;
+      this.mjtype = mjTypes == 2 ? true : false;
       this.radio = this.orderData.addressId;
     } else {
       this.orderData = this.$route.query.data;
+			console.log(this.$route.query.data.addressId)
       this.adTotalMoney = this.orderData.realTotalMoney;
       this.mjtype = this.$route.query.mjtype == 2 ? true : false;
       this.radio = this.orderData.addressId;
+			if(this.$route.query.data.addressId){
+				var orderDatas = JSON.stringify(this.orderData);
+				localStorage.setItem("mjType", this.mjType);
+				localStorage.setItem("mjOrderData", orderDatas);
+			}
     }
 
-    console.log('addressid=' + this.orderData.addressId);
-    // console.log(this.radio);
-    // for (let i = 0; i < this.orderData.goodsData.length; i++) {
-    //   this.orderData.goodsData[i].goodsThums = config.host + this.orderData.goodsData[i].goodsThums;
-    // }
-    // console.log(this.orderData);
+ 
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+  // console.log(thisUrl)
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
+		
+		var add = localStorage.getItem("defaultAddress");
+		if(add){
+			add = JSON.parse(add);
+			this.orderData.defaultAddress = add;
+			console.log(add)
+		}
+		console.log(this.orderData)
   },
   methods: {
     //跳转至添加地址页面
     handleAddAddress(e) {
       //跳转页面后返回本页面 数据丢失 为了解决本问题 将数据保存至window对象上(因为项目设计时未使用vuex)
-      window.mjOrderData = this.orderData;
-      window.mjType = this.mjType;
-      console.log('111');
+//       var orderDatas = JSON.stringify(this.orderData);
+//       var mjType = JSON.stringify(this.mjType);
+//       localStorage.setItem("mjType", mjType);
+//       localStorage.setItem("mjOrderData", orderDatas);
+      
+    // console.log('111');
       this.$router.push('/addAddress');
     },
     handleBack() {
       this.$router.go(-1);
-      // console.log(this.$router);
+    // console.log(666);
     },
     // 选择地址
     chooseAddress() {
@@ -214,8 +244,9 @@ export default {
       let url = `${config.host}index.php?m=Mobile&c=UserAddress&a=getUserAddress&userId=${userId}`;
       this.$http.get(url).then((res) => {
         this.addressData = res.body;
+				localStorage.removeItem("defaultAddress");
         this.$dialog.loading.close();
-        console.log(res.body.length);
+      // console.log(res.body.length);
       })
     },
     // 更改地址
@@ -231,7 +262,7 @@ export default {
             // console.log(this.orderData.address);
             // console.log(this.orderData);
           };
-          console.log(this.orderData);
+        // console.log(this.orderData);
         }
 
       };
@@ -246,6 +277,7 @@ export default {
         this.$dialog.confirm({
           title: '温馨提示',
           mes: '请选择收货地址！',
+          icon: 'none',
           opts: [{
               txt: '取消',
               color: false
@@ -260,8 +292,8 @@ export default {
           ]
         });
       } else {
-        console.log(this.orderData.addressId);
-        console.log(userId);
+      // console.log(this.orderData.addressId);
+      // console.log(userId);
         this.postData.addressId = this.orderData.addressId; //地址ID
         this.postData.orderIds = this.orderData.orderIds; //订单ID
         this.postData.orderRemarks = this.orderRemarks; //留言
@@ -271,7 +303,7 @@ export default {
         this.$http.post(url, this.postData, {
           emulateJSON: true
         }).then((res) => {
-          console.log(res);
+        // console.log(res);
           if (res.data.status == 1) {
             this.$dialog.toast({
               icon: 'success',
@@ -307,8 +339,6 @@ export default {
     },
     //提交订单
     confirmOrder() {
-      window.mjOrderData = null;
-      window.mjType = null;
       if (!this.orderData.defaultAddress) {
         this.$dialog.confirm({
           title: '温馨提示',
@@ -327,7 +357,7 @@ export default {
           ]
         });
       } else {
-        console.log(this.orderData.addressId);
+      // console.log(this.orderData.addressId);
         this.postData.addressId = this.orderData.addressId; //地址ID
         this.postData.orderIds = this.orderData.orderIds; //订单ID
         this.postData.orderRemarks = this.orderRemarks; //留言
@@ -338,18 +368,21 @@ export default {
         this.$http.post(url, this.postData, {
           emulateJSON: true
         }).then((res) => {
-          console.log(res);
+        // console.log(res);
           if (res.data.status == 1) {
+						localStorage.removeItem("mjType");
+						localStorage.removeItem("mjOrderData");
             this.$dialog.toast({
               icon: 'success',
               mes: '正在生成订单~~~',
               timeout: 1500,
               callback: () => {
-                window.location.href = `${config.host}index.php?m=Mobile&c=Payments&a=toPay`;
-                // this.$router.go(-1);
+              window.location.href = `${config.host}index.php?m=Mobile&c=Payments&a=toPay`;
+                //this.$router.go(-1);
+                //console.log(999)
               }
             });
-          } else {
+          } else { 
             this.$dialog.toast({
               icon: 'error',
               mes: '网络异常，请重试!',

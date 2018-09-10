@@ -54,13 +54,11 @@ export default {
   watch: {
     url() {
       this.data = [];
-      console.log(this.url);
+
       let self = this;
       this.page = 1;
       this.pageSize = 10;
-      console.log(this.url);
       self.$http.get(`${this.url}${this.page}`).then(res => {
-        console.log(res.body);
         this.page++;
         let data = res.body;
         for (let i = 0; i < data.length; i++) {
@@ -70,7 +68,6 @@ export default {
         if (data.length == 0 && this.isSearch == 1) {
           this.isShow = true;
         }
-        // console.log(data);
       });
     }
   },
@@ -80,7 +77,6 @@ export default {
     this.pageSize = 10;
     if (this.url) {
       self.$http.get(`${this.url}${this.page}`).then(res => {
-        console.log(res.body);
         this.page++;
         let data = res.body;
         for (let i = 0; i < data.length; i++) {
@@ -100,7 +96,6 @@ export default {
     loadList() {
       // console.log(this.page);
       this.$http.get(`${this.url}${this.page}`).then(function(res) {
-        console.log(this.url);
         const _data = res.body;
         // console.log(_data);
         for (let i = 0; i < _data.length; i++) {

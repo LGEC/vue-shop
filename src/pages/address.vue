@@ -61,8 +61,20 @@ export default {
     let url = `${config.host}index.php?m=Mobile&c=UserAddress&a=getUserAddress&userId=${userId}&p=`;
     this.$http.get(url).then((res) => {
       this.data = res.body;
-      console.log(res.body);
+    // console.log(res.body);
     })
+    
+    //微信分享
+    let thisUrl = window.location.href;
+  // console.log(thisUrl)
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
+    });
   },
   methods: {
     handleBack() {

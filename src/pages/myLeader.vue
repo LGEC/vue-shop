@@ -16,9 +16,9 @@
         <span slot="left">绑定邀请码：</span>
         <yd-input slot="right" v-model="input" placeholder="请输入邀请码" required :show-success-icon="false" :show-error-icon="false" ref="input"></yd-input>
       </yd-cell-item>
-
+			
     </yd-cell-group>
-
+		<p style="display: block;padding:0 0.24rem;">*默认邀请码：<span style="color: #f00;font-size: 0.36rem;letter-spacing: 0.02rem;">QWEDFG</span></p>
     <yd-button-group>
       <yd-button bgcolor="#e8380d" color="#fff" size="large" @click.native="clickHander">提交</yd-button>
     </yd-button-group>
@@ -56,13 +56,24 @@ export default {
     this.$http.get(url).then((res) => {
       this.$dialog.loading.close();
       this.loaded = true;
-      console.log(res);
+    // console.log(res);
       if (res.body.status == 1) {
         this.content = res.body;
         this.showInput = false;
       } else {
         this.showInput = true;
       }
+    });
+    
+  	//微信分享
+    let thisUrl = window.location.href;
+    wechatShare({
+    	url:thisUrl,
+    	title: '分领商城',
+    	desc:'分享财富，引领未来',
+     	content: '分享财富，引领未来',
+     	link: '',
+     	logo: '',
     });
   },
   methods: {
@@ -71,7 +82,7 @@ export default {
     },
     clickHander() {
       let url = `${config.host}index.php?m=Mobile&c=Users&a=toRegistCode`;
-      console.log(this.input);
+    // console.log(this.input);
       if (this.$refs.input.valid) {
         this.$http.post(url, {
           userId: userId,
@@ -80,7 +91,7 @@ export default {
           emulateJSON: true
         }).then((res) => {
 
-          console.log(res);
+        // console.log(res);
           if (res.body.status === 1) {
             this.$dialog.toast({
               mes: '绑定成功!',
@@ -94,7 +105,7 @@ export default {
             });
           }
         }, (err) => {
-          console.log(err);
+        // console.log(err);
         });
       } else {
         this.$dialog.toast({
